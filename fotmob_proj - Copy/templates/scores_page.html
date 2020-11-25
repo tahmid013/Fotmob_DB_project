@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="templates/css/bootstrap.min.css">
+    <link rel="stylesheet" href="templates/css/styles.css">
+    <title>main_page...</title>
+    
+</head>
+<style type="text/css">
+	body {
+		background-color: #e6d195;
+		padding: 0px;
+		margin:0px;
+	}
+	#header_name{
+		background-color: #12CC32;
+		padding-top: 20px;
+		padding-bottom: 5px;
+		margin-bottom: 50px;
+	}
+	#content{
+		margin-top: 300px;
+		margin: 10px;
+	}
+	#option{
+		position: absolute;
+		margin: 10px;
+	}
+	#option .left{
+		float: left;
+		margin-top:10px;
+		margin-right:50px;  
+		border: 2px solid blue;
+		background-color: white;
+		color: white;
+
+	}
+	#table_1{
+		margin-top: 50px;
+	}
+</style>
+<body>
+<header id ="header_name">     
+	
+    <h1 >Fotmob</h1>
+    <section id ="option">
+        
+        <div class="left"><a href="{% url 'index' %}">Home</a></div>
+    	<div class="left"><a href="{% url 'scores' %}">Scores</a></div>
+        <div class="left"><a href="{% url 'table' %}">Table</a></div>
+        
+    </section>
+            
+          
+         
+</header>
+
+
+<h2 style="margin-left: 40%;; align-content: center;">STATISTICS</h2>
+
+<ul>
+  <li><a href ="{% url 'goals'%}">Goals</a></li>
+  <li><a href ="{% url 'assists'%}" >Assits</a></li>
+  <li><a href ="{% url 'red'%}">Red card</a></li>
+  <li><a href ="{% url 'yellow'%}">Yellow card</a></li>
+</ul>  
+<table width="100%"  border="1">
+    <tr style="background-color:lightgray">
+        <th>Name</th>
+        <th>Short Form</th>
+    </tr>
+    {% for score in scores %}
+       <tr>
+           
+           <td>{{score.Team_name }}</td>
+           <td>{{score.Short_name}}</td>
+       </tr>
+    {% endfor %}
+
+</table>
+</body>
+</html>

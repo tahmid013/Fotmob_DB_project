@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="templates/css/bootstrap.min.css">
+    <link rel="stylesheet" href="templates/css/styles.css">
+    <title>main_page...</title>
+    
+</head>
+<style type="text/css">
+	body {
+		background-color: #e6d195;
+		padding: 0px;
+		margin:0px;
+	}
+	#header_name{
+		background-color: #12CC32;
+		padding-top: 20px;
+		padding-bottom: 5px;
+	}
+	#content{
+		margin: 10px;
+	}
+	#option{
+		position: absolute;
+		margin: 10px;
+	}
+	#option .left{
+		float: left;
+		margin-top:10px;
+		margin-right:50px;  
+		border: 2px solid blue;
+		background-color: black;
+		color: white;
+
+	}
+	#table_1{
+		margin-top: 50px;
+	}
+</style>
+<body>
+<header id ="header_name">     
+	
+    <h1 >Fotmob</h1>
+    <section id ="option">
+    	<div class="left">Player</div>
+    	<div class="left">Team</div>
+    </section>
+            
+          
+         
+</header>
+<section id ="content">
+
+<h1 id ="table_1">Referee</h1>
+
+<table width="100%"  border="1">
+    <tr style="background-color:lightgray">
+        <th>ID</th>
+        <th>Name</th>
+        <th>Match_controlled</th>
+        
+    </tr>
+    {% for referee_each in main_.referee %}
+       <tr>
+           <td>{{referee_each.referee_id}}</td>
+           <td>{{referee_each.referee_name }}</td>
+           <td>{{referee_each.match_controlled}}</td>
+       </tr>
+    {% endfor %}
+
+</table>
+</section>
+<section id ="content">
+
+<h1 id ="table_1">Player</h1>
+
+<table width="100%"  border="1">
+    <tr style="background-color:lightgray">
+        <th>ID</th>
+        <th>First_Name</th>
+        <th>Last_Name</th>
+        <th>Position</th>
+        <th>Minutes_played</th>
+        <th>Red_card</th>
+        <th>Yellow_card</th>
+        <th>Country</th>
+        <th>Team_id</th>
+    </tr>
+    {% for player_each in main_.player %}
+       <tr>
+           <td>{{player_each.player_id}}</td>
+           <td>{{player_each.First_name}}</td>
+           <td>{{player_each.Last_name}}</td>
+           <td>{{player_each.Position}}</td>
+           <td>{{player_each.Minutes_played}}</td>
+           <td>{{player_each.Red_card}}</td>
+           <td>{{player_each.Yellow_card}}</td>
+           <td>{{player_each.Country}}</td>
+           <td>{{player_each.Team_id}}</td>
+
+           
+       </tr>
+    {% endfor %}
+
+</table>
+</section>
+</body>
+</html>

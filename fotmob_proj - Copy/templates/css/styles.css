@@ -1,0 +1,82 @@
+body {
+  font-size: 16px;
+  color: #ffffff ;
+  background-color: #AC940C;
+  font-family: 'Roboto', sans-serif;
+}
+
+/** HEADER **/
+#header-nav {
+  background-color: rgba(27, 204, 04, 1);
+  border-radius: 0;
+  border: 0;
+}
+#menu-id ,#login-id{
+  width: 50px;
+  height: 40px;
+  color: #ffffff;
+  margin:5px 25px 10px 0;
+  font-size: 1.2em;
+}
+ .container{
+  width: 100%;
+
+ }
+.jumbotron{
+  position: relative;
+  color: #ffffff;
+}
+.navbar-brand {
+  padding-top: 30px;/*must include to align site name*/
+}
+.navbar-brand h1 { /*  name */
+  font-family: 'Salsa', serif;
+  color: #ffffff;
+  font-size: 1.9em;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px #222;
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: .75;
+}
+.navbar-brand a:hover, .navbar-brand a:focus {
+  text-decoration: none;
+}
+.navbar-brand p { /* Kosher cert */
+  color: #000;
+  text-transform: uppercase;
+  font-size: .7em;
+  /*margin-top: 15px;*/
+}
+.navbar-brand p span { /* Star-K */
+  vertical-align: middle;
+}
+
+#nav-list {
+  margin-top: 0px;
+}
+#header-nav{
+  margin-bottom:  0px;
+}
+#nav-list a {
+  color: #ffffff;
+  text-align: center;
+}
+#nav-list a:hover {
+}
+#nav-list a span {
+  font-size: 1.8em;
+}
+
+
+
+.navbar-header button.navbar-toggle, .navbar-header .icon-bar {
+  border: 1px solid #61122f;
+}
+.navbar-header button.navbar-toggle {
+  clear: both;
+  margin-top: -30px;
+}
+/* END HEADER */
+
