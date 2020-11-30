@@ -1,9 +1,38 @@
 from django.shortcuts import render
+from django.template.response import TemplateResponse
+from django.http import HttpResponse
+
 from django.db import connection
 
 # Create your views here.
 def  HomepageView(request):
         return render(request, 'base.html');
+def  InsertView  (request):
+        return render(request,  'insert.html');
+
+def  LoginView(request):
+    if request.method=='POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        cursor = connection.cursor()
+        sql = "SELECT Username, Password FROM ADMIN"
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        cursor.close()
+        matched = False
+        
+        for r in result:
+            if r[0]==username and r[1]==password:
+                matched=True
+                break
+        dict ={'user' : username,'matched' : matched}
+      
+        if matched:
+            return TemplateResponse(request, 'loginsuccess.html', { 'priv': username});
+        else:
+            return render(request, 'loginfailed.html');
+    else:
+        return render(request, 'loginPage.html');
 def  TablePoint(request):
         cursor = connection.cursor()
         sql = "SELECT S.TEAM_ID,T.TEAM_NAME ,T.SHORT_NAME,3*SUM(GOALS)+SUM(ASSIST) AS pt FROM SCORES S JOIN TEAM T ON (S.TEAM_ID = T.TEAM_ID) GROUP BY S.TEAM_ID,T.TEAM_NAME,T.SHORT_NAME ORDER BY pt desc"

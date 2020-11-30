@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="templates/css/bootstrap.min.css">
+    <link rel="stylesheet" href="templates/css/styles.css">
+    <title>main_page...</title>
+    
+</head>
+<style type="text/css">
+	body {
+		background-color: #e6d195;
+		padding: 0px;
+		margin:0px;
+	}
+	#header_name{
+		background-color: #12CC32;
+		padding-top: 20px;
+		padding-bottom: 5px;
+		margin-bottom: 50px;
+	}
+	#content{
+		margin-top: 300px;
+		margin: 10px;
+	}
+	#option{
+		position: absolute;
+		margin: 10px;
+	}
+	#option .left{
+		float: left;
+		margin-top:10px;
+		margin-right:50px;  
+		border: 2px solid blue;
+		background-color: white;
+		color: white;
+
+	}
+	#table_1{
+		margin-top: 50px;
+	}
+</style>
+<body>
+<header id ="header_name">     
+	
+    <h1 >Fotmob</h1>
+    <section id ="option">
+        
+        <div class="left"><a href="{% url 'index' %}">Home</a></div>
+    	<div class="left"><a href="{% url 'scores' %}">Scores</a></div>
+        <div class="left"><a href="{% url 'table' %}">Table</a></div>
+        
+    </section>
+            
+          
+         
+</header>
+
+
+
+
+<h1 id ="table_1">TEAM</h1>
+
+<table width="100%"  border="1">
+    <tr style="background-color:lightgray">
+        <th>ID</th>
+        <th>TEAM NAME</th>
+        <th>SHORT NAME</th>
+        <th>Edit</th>
+    </tr>
+    {% for player_each in cont.type %}
+       <tr>
+           <td>{{player_each.team_id}}</td>
+           <td>{{player_each.team_name}}</td>
+           <td>{{player_each.s_name}}</td>
+			<td>
+			<a href="{%url 'util_d' cont.list.name player_each.team_id%}">Delete</a>
+				
+			</td>
+       </tr>
+    {% endfor %}
+
+</table>
+
+
+</body>
+</html>

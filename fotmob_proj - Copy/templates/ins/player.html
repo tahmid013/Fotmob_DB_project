@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="templates/css/bootstrap.min.css">
+    <link rel="stylesheet" href="templates/css/styles.css">
+    <title>main_page...</title>
+    
+</head>
+<style type="text/css">
+	body {
+		background-color: #e6d195;
+		padding: 0px;
+		margin:0px;
+	}
+	#header_name{
+		background-color: #12CC32;
+		padding-top: 20px;
+		padding-bottom: 5px;
+		margin-bottom: 50px;
+	}
+	#content{
+		margin-top: 300px;
+		margin: 10px;
+	}
+	#option{
+		position: absolute;
+		margin: 10px;
+	}
+	#option .left{
+		float: left;
+		margin-top:10px;
+		margin-right:50px;  
+		border: 2px solid blue;
+		background-color: white;
+		color: white;
+
+	}
+	#table_1{
+		margin-top: 50px;
+	}
+	.cont{
+		margin-left: 50px;
+	}
+	.cont p label{
+		margin-right: 70px;
+	}
+</style>
+<body>
+<header id ="header_name">     
+	
+    <h1 >Fotmob</h1>
+    <section id ="option">
+        
+        <div class="left"><a href="{% url 'index' %}">Home</a></div>
+    	<div class="left"><a href="{% url 'scores' %}">Scores</a></div>
+        <div class="left"><a href="{% url 'table' %}">Table</a></div>
+        
+    </section>
+            
+          
+         
+</header>
+
+
+<h2 style="margin-left: 40%;; align-content: center;">Fill form Player</h2>
+<form method="POST" autocomplete="off">
+	{% csrf_token %}
+	<h1 class ="cont">Inserting player</h1>
+
+	<div class="cont">
+	  <p>
+		<label for="f_name">First Name</label>
+		<input type="text" name="f_name" id="f_name">
+	  </p>
+
+	  <p>
+		<label for="l_name">Last Name</label>
+		<input type="text" name="l_name" id="l_name">
+	  </p>
+	  <p>
+		<label for="position">Position</label>
+		<input type="text" name="position" id="position">
+	  </p>
+
+	  <p>
+		<label for="min_played">Minutes Played</label>
+		<input type="text" name="min_played" id="min_played">
+	  </p>
+	  <p>
+		<label for="r_card">Red Card</label>
+		<input type="text" name="r_card" id="r_card">
+	  </p>
+	  <p>
+		<label for="y_card">Yellow Card</label>
+		<input type="text" name="y_card" id="y_card">
+	  </p>
+	  <p>
+		<label for="Country">Country</label>
+		<input type="text" name="Country" id="Country">
+	  </p>
+	  <p>
+		<label for="team">Team short name</label>
+		<input type="text" name="team" id="team">
+	  </p>
+	  <input type="submit" name="go" id="go" value="insert" class ="button">
+
+	  
+
+	</div>
+  </form>
+  <p>please fill all ncessary information</p>
+</body>
+</html>
