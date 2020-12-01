@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,8 +18,10 @@
 		background-color: #12CC32;
 		padding-top: 20px;
 		padding-bottom: 5px;
+		margin-bottom: 50px;
 	}
 	#content{
+		margin-top: 300px;
 		margin: 10px;
 	}
 	#option{
@@ -43,41 +46,45 @@
 	
     <h1 >Fotmob</h1>
     <section id ="option">
-		<div class="left"><a href="{% url 'index' %}">Home</a></div>
+        
+        <div class="left"><a href="{% url 'index' %}">Home</a></div>
     	<div class="left"><a href="{% url 'scores' %}">Scores</a></div>
-    	<div class="left"><a href="{% url 'table' %}">Table</a></div>
+        <div class="left"><a href="{% url 'table' %}">Table</a></div>
+        
     </section>
             
           
          
 </header>
 <section id ="content">
-
-<h1 id ="table_1">Table Point</h1>
-
-<table width="100%"  border="1">
-    <tr style="background-color:lightgray">
-        <th>Team_name</th>
-		<th>PL</th>
-		<th>W</th>
-		<th>D</th>
-		<th>L</th>
-		<th>PTS</th>
-    </tr>
-    {% for team_each in table %}
-       <tr>
-           <td><a href="{%url 'team_info' team_each.Team_id %}">{{team_each.Team_name}}</a></td>
-		   <td>{{team_each.Played }}</td>
-		   <td>{{team_each.Win }}</td>
-		   <td>{{team_each.Draw }}</td>
-		   <td>{{team_each.Lose }}</td>
-		   <td>{{team_each.Point }}</td>
-          
-       </tr>
-	{% endfor %}
+    {% for team_each in squad_details.team_info %}
+	<h1 >Team : {{ team_each.Team_name}} ({{team_each.short_name}})</h1>
 	
+    {% endfor %}
 
-</table>
+
+
+</section>
+<section id ="content">
+
+<h1 id ="table_1"></h1>
+<div>
+	<h3>Coach: </h3>
+	<ul>
+	{% for coach_each in squad_details.coach %}
+	<li><p><a href="{%url 'coach_info' coach_each.coach_id  %}">{{coach_each.coach_name}}</a></p></li>
+	{% endfor %}
+	</ul>
+</div>
+    {% for p1 in squad_details.position %}
+	<h2>{{p1.pos}}</h2>
+		<ol>
+           {% for p2 in p1.pl %}
+		   <li><h4><a href="{%url 'players_info' p2.id %}">{{p2.name}}</a></h4></li>
+		   {% endfor %}       
+		</ol>
+    {% endfor %}
+
 </section>
 </body>
 </html>

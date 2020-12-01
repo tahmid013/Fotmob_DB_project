@@ -56,46 +56,24 @@
           
          
 </header>
-<section id ="content">
-    {% for team_each in Player_details.team_info %}
-	<h1 >Team : {{ team_each.Team_name}} ({{team_each.short_name}})</h1>
-	
-    {% endfor %}
 
 
+<h2 style="margin-left: 40%;; align-content: center;">PLAYER INFO</h2>
+	{% for p in player_details %}
+	<div><b>NAME:</b>  <span>{{p.Name}}</span></div>
+	<div><b>Player Position : </b>  <span>{{p.Position}}</span></div>
+	<div><b>Country:</b>  <span>{{p.Country}}</span></div>
+	<div><b>Minutes played:</b>  <span>{{p.Minutes_played}}</span></div>
+	<div><b>Red card:</b>  <span>{{p.Red_card}}</span></div>
+	<div><b>Yellow card:</b>  <span>{{p.Yellow_card}}</span></div>
 
-</section>
-<section id ="content">
-
-<h1 id ="table_1"></h1>
-
-
-<table width="100%"  border="1">
-    <tr style="background-color:lightgray">
-        <th>ID</th>
-        <th>Name</th>
-        <th>Position</th>
-        <th>Minutes_played</th>
-        <th>Red_card</th>
-        <th>Yellow_card</th>
-        <th>Country</th>
-    </tr>
-    {% for player_each in Player_details.player %}
-       <tr>
-           <td>{{player_each.player_id}}</td>
-           <td>{{player_each.Name}}</td>
-           <td>{{player_each.Position}}</td>
-           <td>{{player_each.Minutes_played}}</td>
-           <td>{{player_each.Red_card}}</td>
-           <td>{{player_each.Yellow_card}}</td>
-           <td>{{player_each.Country}}</td>
-
-           
-       </tr>
-    {% endfor %}
-
-</table>
-
-</section>
+	{% endfor %}
+	<hr>
+	{% for p in goals %}
+	<div><b>Goals:</b>  <span>{{p.g}}</span></div>
+	{% endfor %}
+	{% for p in assist %}
+	<div><b>Assist:</b>  <span>{{p.a}}</span></div>
+	{% endfor %}
 </body>
 </html>

@@ -1,12 +1,20 @@
 from django.shortcuts import render
 from django.template.response import TemplateResponse
 from django.http import HttpResponse
-
 from django.db import connection
 
 # Create your views here.
 def  HomepageView(request):
-        return render(request, 'base.html');
+        """
+        logged_in = False 
+        username =""
+        if request.session.has_key('username'):
+            username = request.session['member_id']
+            
+        if(username):
+            logged_in = True
+        dict={'username':username}"""
+        return render(request, 'base.html',{'check':dict});
 def  InsertView  (request):
         return render(request,  'insert.html');
 
@@ -28,6 +36,7 @@ def  LoginView(request):
         dict ={'user' : username,'matched' : matched}
       
         if matched:
+            """request.session['member_id'] = username"""
             return TemplateResponse(request, 'loginsuccess.html', { 'priv': username});
         else:
             return render(request, 'loginfailed.html');
@@ -35,7 +44,7 @@ def  LoginView(request):
         return render(request, 'loginPage.html');
 def  TablePoint(request):
         cursor = connection.cursor()
-        sql = "SELECT S.TEAM_ID,T.TEAM_NAME ,T.SHORT_NAME,3*SUM(GOALS)+SUM(ASSIST) AS pt FROM SCORES S JOIN TEAM T ON (S.TEAM_ID = T.TEAM_ID) GROUP BY S.TEAM_ID,T.TEAM_NAME,T.SHORT_NAME ORDER BY pt desc"
+        sql = "SELECT S.TEAM_ID,T.TEAM_NAME ,T.SHORT_NAME,3*SUM(GOALS)+SUM(ASSIST) AS pt,Win(S.TEAM_ID),Draw(S.TEAM_ID),Lose(S.TEAM_ID) FROM SCORES S JOIN TEAM T ON (S.TEAM_ID = T.TEAM_ID) GROUP BY S.TEAM_ID,T.TEAM_NAME,T.SHORT_NAME ORDER BY pt desc"
         cursor.execute(sql)
         result = cursor.fetchall()
         cursor.close()
@@ -45,9 +54,12 @@ def  TablePoint(request):
             Team_name = r[1]
             Short_name = r[2]
             Point = r[3]
-            row  = {'Team_id': Team_id,'Team_name': Team_name,'Short_name':Short_name,'Point':Point}
+            W = r[4]
+            D = r[5]
+            L = r[6]
+            PL =(W+L+D)
+            row  = {'Team_id': Team_id,'Team_name': Team_name,'Short_name':Short_name,'Played':PL,'Point':Point,'Win':W,'Draw':D,'Lose':L}
             dict.append(row);
-        
         return render(request,'table_point.html',{'table' :dict});
 def  TeamInfo(request ,Team_id):
         cursor = connection.cursor()

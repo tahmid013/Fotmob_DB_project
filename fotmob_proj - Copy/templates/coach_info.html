@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,8 +18,10 @@
 		background-color: #12CC32;
 		padding-top: 20px;
 		padding-bottom: 5px;
+		margin-bottom: 50px;
 	}
 	#content{
+		margin-top: 300px;
 		margin: 10px;
 	}
 	#option{
@@ -43,41 +46,23 @@
 	
     <h1 >Fotmob</h1>
     <section id ="option">
-		<div class="left"><a href="{% url 'index' %}">Home</a></div>
+        
+        <div class="left"><a href="{% url 'index' %}">Home</a></div>
     	<div class="left"><a href="{% url 'scores' %}">Scores</a></div>
-    	<div class="left"><a href="{% url 'table' %}">Table</a></div>
+        <div class="left"><a href="{% url 'table' %}">Table</a></div>
+        
     </section>
             
           
          
 </header>
-<section id ="content">
 
-<h1 id ="table_1">Table Point</h1>
 
-<table width="100%"  border="1">
-    <tr style="background-color:lightgray">
-        <th>Team_name</th>
-		<th>PL</th>
-		<th>W</th>
-		<th>D</th>
-		<th>L</th>
-		<th>PTS</th>
-    </tr>
-    {% for team_each in table %}
-       <tr>
-           <td><a href="{%url 'team_info' team_each.Team_id %}">{{team_each.Team_name}}</a></td>
-		   <td>{{team_each.Played }}</td>
-		   <td>{{team_each.Win }}</td>
-		   <td>{{team_each.Draw }}</td>
-		   <td>{{team_each.Lose }}</td>
-		   <td>{{team_each.Point }}</td>
-          
-       </tr>
-	{% endfor %}
-	
+<h2 style="margin-left: 40%;; align-content: center;">Coach</h2>
+{% for coach_each in coach_details %}
 
-</table>
-</section>
+<div><b>Coach name:</b>  <span>{{coach_each.Coach_name}}</span></div>
+<div><b>Leagues Won:  </b><span>{{coach_each.Leagues_won}}</span></div>
+{% endfor %}
 </body>
 </html>

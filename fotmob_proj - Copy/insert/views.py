@@ -136,8 +136,88 @@ def  MatchInsView(request):
             return render(request, 'ins/match.html');
         
 def  ScoreInsView(request):
-       
-        return render(request, 'ins/score.html');
+        if(request.method == 'POST'):
+            goals = request.POST['goals']
+            assist = request.POST['assist']
+            scoring_name = request.POST['scoring_name']
+            assist_name = request.POST['assist_name']
+            team_name = request.POST['team_name']
+            match_date = request.POST['match_date']
+            stadium_name = request.POST['stadium_name']
+            
+            sc_id=-1
+            as_id=-1
+            t_id=-1
+            m_id = -1
+            
+            cursor = connection.cursor()
+            sql = "SELECT  PLAYER_ID FROM PLAYER WHERE (First_name||' '||Last_name = %s);"
+            cursor.execute(sql,[scoring_name])
+            result = cursor.fetchall()
+            cursor.close()
+   
+            for r in result:
+                sc_id = r[0]
+            
+            cursor = connection.cursor()
+            sql = "SELECT  PLAYER_ID FROM PLAYER WHERE (First_name||' '||Last_name = %s);"
+            cursor.execute(sql,[assist_name])
+            result = cursor.fetchall()
+            cursor.close()
+   
+            for r in result:
+                as_id= r[0]
+            
+            cursor = connection.cursor()
+            sql = 'SELECT  TEAM_ID FROM TEAM WHERE (SHORT_NAME = %s);'
+            cursor.execute(sql,[team_name])
+            result = cursor.fetchall()
+            cursor.close()
+   
+            for r in result:
+                t_id = r[0]            
+            
+            cursor = connection.cursor()
+            date_format = 'yyyy-mm-dd hh24:mi:ss'
+            sql = 'SELECT  MATCH_ID FROM MATCH M JOIN STADIUM S ON (M.STADIUM_ID = S.STADIUM_ID) WHERE (M.DATE_ = TO_DATE(%s,%s) and S.STADIUM_NAME = %s);'
+            cursor.execute(sql,[match_date,date_format,stadium_name])
+            result = cursor.fetchall()
+            cursor.close()
+   
+            for r in result:
+                m_id = r[0]
+            
+            flag = False;
+            
+           
+            if( goals == "" or assist == ""  or sc_id==-1 or as_id==-1 or  t_id==-1 or m_id==-1):
+                    flag = True
+            
+            if(goals == 0 and assist!=""):
+                    flag = True
+            if(goals == 0 and assist==""):
+                    flag = False
+            
+            if(flag == False):
+                if(goals != 0):
+                    cursor = connection.cursor()
+                    sql = 'INSERT INTO SCORES(GOALS,ASSIST,SCORING_ID,ASSIST_ID,MATCH_ID,TEAM_ID) VALUES(%s,%s,%s,%s,%s,%s);'
+                    cursor.execute(sql,[goals,assist,sc_id,as_id,m_id,t_id])
+                    connection.commit()
+                    cursor.close()
+                else:
+                    cursor = connection.cursor()
+                    sql = 'INSERT INTO SCORES(GOALS,ASSIST,SCORING_ID,MATCH_ID,TEAM_ID) VALUES(%s,%s,%s,%s,%s);'
+                    cursor.execute(sql,[goals,assist,sc_id,m_id,t_id])
+                    connection.commit()
+                    cursor.close()
+            name = 'scores_ins'
+            if(flag == True):
+                return render(request, 'ins/failed.html',{'type':name});
+            if(flag == False):
+                return render(request, 'ins/success.html',{'type':name});
+        else:
+            return render(request, 'ins/score.html');
 def  TeamInsView(request):
         if(request.method == 'POST'):
             team_name = request.POST['t_name']

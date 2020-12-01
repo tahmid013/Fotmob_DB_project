@@ -53,12 +53,56 @@
         
     </section>
             
-          
+	
          
 </header>
 
 
 <h2 style="margin-left: 40%;; align-content: center;">Fill form for score</h2>
+
+<form method="POST" autocomplete="off">
+	{% csrf_token %}
+	<h1 class ="cont">Inserting Score</h1>
+
+	<div class="cont">
+	  <p>
+		<label for="goals">Goals</label>
+		<input type="text" name="goals" id="goals">
+	  </p>
+
+	  <p>
+		<label for="assist">Assist</label>
+		<input type="text" name="assist" id="assist">
+	  </p>
+	  <p>
+		<label for="scoring_name">Scorer name</label>
+		<input type="text" name="scoring_name" id="scoring_name">
+	  </p>
+
+	  <p>
+		<label for="assist_name">Assist name</label>
+		<input type="text" name="assist_name" id="assist_name">
+	  </p>
+	  <p>
+		<label for="team_name">Team name</label>
+		<input type="text" name="team_name" id="team_name">
+	  </p>
+	  <p>
+		<label for="match_date">Match date</label>
+		<input type="text" name="match_date" id="match_date">
+	  </p>
+	  <p>
+		<label for="stadium_name">Stadium name</label>
+		<input type="text" name="stadium_name" id="stadium_name">
+	  </p>
+	  
+	  <input type="submit" name="go" id="go" value="insert" class ="button">
+
+	  
+
+	</div>
+  </form>
+  <p>please fill all ncessary information</p>
 
 </body>
 </html>

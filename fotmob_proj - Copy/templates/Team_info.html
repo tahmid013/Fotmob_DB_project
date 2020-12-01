@@ -59,7 +59,7 @@
 <section id ="content">
     {% for team_each in content.team_info %}
     	<h1 >Team : {{ team_each.Team_name}} ({{team_each.short_name}})</h1>
-		<h3><a href="{%url 'player_info' team_each.Team_id  %}">Players</a></h3>	
+		<h3><a href="{%url 'squad_infos' team_each.Team_id  %}">SQUAD</a></h3>	
 	{% endfor %}
 </section>
 <section id ="content">
