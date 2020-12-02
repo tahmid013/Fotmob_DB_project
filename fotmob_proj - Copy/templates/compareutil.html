@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,10 +17,8 @@
 		background-color: #12CC32;
 		padding-top: 20px;
 		padding-bottom: 5px;
-		margin-bottom: 50px;
 	}
 	#content{
-		margin-top: 300px;
 		margin: 10px;
 	}
 	#option{
@@ -40,29 +37,46 @@
 	#table_1{
 		margin-top: 50px;
 	}
+	table th,td{
+		padding: 5px;
+	}
 </style>
 <body>
 <header id ="header_name">     
 	
     <h1 >Fotmob</h1>
     <section id ="option">
-        
-        <div class="left"><a href="{% url 'index' %}">Home</a></div>
+		<div class="left"><a href="{% url 'index' %}">Home</a></div>
     	<div class="left"><a href="{% url 'scores' %}">Scores</a></div>
-        <div class="left"><a href="{% url 'table' %}">Table</a></div>
-        
+    	<div class="left"><a href="{% url 'table' %}">Table</a></div>
     </section>
             
           
          
 </header>
+<section id ="content">
+	<form method="POST" autocomplete="off">
+        {% csrf_token %}
+        <h1>Input players</h1>
 
+        <div class="inset">
+          <span>
+            <label for="player1">Player 1</label>
+            <input type="text" name="player1" id="player1">
+          </span>
 
-<h2 style="margin-left: 40%;; align-content: center;">Choose  option</h2>
-<ul>
-<li class="left"><a href="{% url 'insert' %}">insert</a></li>
-<li class="left"><a href="{% url 'delete' %}">delete</a></li>
-<li class="left"><a href="{% url 'update' %}">update</a></li>
-</ul>
+          <span>
+            <label for="player2">Player 2</label>
+            <input type="text" name="player2" id="player2">
+          </span>
+
+          <a href="compare"><input type="submit" name="go" id="go" value="submitted" class ="button"></a>>
+
+          
+		
+	  </form>
+	  
+</section>
+
 </body>
 </html>

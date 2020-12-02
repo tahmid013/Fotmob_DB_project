@@ -49,8 +49,17 @@
       background-color: white;
       color: white;
     }
+    #right{
+      float: right;
+      margin-top:10px;
+      margin-right:50px; 
+    }
     #table_1{
       margin-top: 50px;
+    }
+    img{
+      width: 50px;
+      height: 50px;
     }
   </style>
   <body>
@@ -66,9 +75,16 @@
         <img src="{% static 'images/logoFotmob.png' %}" alt="Fotmob Logo" class="logo">
         <h3 class="subtitle">Football Premier League Info</h3><br>
         <div class="left"><a href=" {% url 'scores' %} " class="">Score</a></div>
-		<div class="left"><a href=" {% url 'table' %} " class="">Table</a></div>
-		
-        <div id="_login"><a href=" {% url 'login' %} " class="">Login</a></div>
+        <div class="left"><a href=" {% url 'table' %} " class="">Table</a></div>
+        <div class="left"><a href="{% url 'compare' %} " class="">Compare</a></div>
+        {%if user != ""%}
+            <div class="left"><a href=" {% url 'adminop' %} " class="">Edit</a></div>
+            <div id="_login"><a href=" {% url 'logout' %} " class="">Logout</a></div>   
+            <div id="right">logged in as {{user}}</div>
+        {%else%} 
+        <div id="_login"><a href=" {% url 'login' %} " class="">Login {{user}}</a></div>
+        {%endif%}
+        
       </div>
       </section>
     </header>

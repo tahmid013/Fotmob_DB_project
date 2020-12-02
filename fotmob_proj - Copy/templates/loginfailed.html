@@ -2,34 +2,84 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Fotmob - Login</title>
-    {% block head %}
-    <!-- Font Awesome -->
+    <title>Fotmob</title>
+    <!--{% block head %}
+        
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'FontAwesome/css/all.css' %}">
-
-    <!-- CSS -->
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
     {% endblock head %}
+    -->
   </head>
-  <body>
+  <style type="text/css">
+    body {
+      background-color: #e6d195;
+      padding: 0px;
+      margin:0px;
+    }
+    #header_name{
+      background-color: #12CC32;
+      padding-top: 20px;
+      padding-bottom: 5px;
+    }
+    #content{
+      margin: 10px;
+    }
+    #option{
+      margin: 10px;
+      width: 100%;
+    }
+    #option .left{
+      float: left;
+      margin-top:10px;
+      margin-right:50px;  
+      border: 2px solid blue;
+      background-color: white;
+      color: white;
 
-    <div class="body">
+  
+    }
+    #_login{
+      float: right;
+      margin-top:10px;
+      margin-right:50px;  
+      border: 2px solid blue;
+      background-color: white;
+      color: white;
+    }
+    #table_1{
+      margin-top: 50px;
+    }
+    img{
+      width: 50px;
+      height: 50px;
+    }
+  </style>
+  <body>
+    <!--navbutton-->
+    <!--navbar-->
+    <!--header-->
+    <header id ="header_name">     
+	
+      <h1 >Fotmob</h1>
+      <section id ="option">
 
       <div class="banner">
-        {% load static %}
-        <img src="{% static 'images/Fotmob_logo.png' %}" alt="Fotmob Logo" class="logo">
-        <h3 class="subtitle">Welcome Back</h3><br>
+        <img src="{% static 'images/logoFotmob.png' %}" alt="Fotmob Logo" class="logo">
       </div>
+      </section>
+      </header>
+      <h3 class="subtitle">Football Premier League Info</h3><br>  
 
       <form method="POST" autocomplete="off">
         {% csrf_token %}
         <h1>Admin Log In</h1>
 
         <div class="inset">
+          <p>Username or password did not match</p>
           <p>
-            <span class="errorMessage">USERNAME (Login Credentials Didn't Match)</span>
+            <label for="username">USERNAME</label>
             <input type="text" name="username" id="username">
           </p>
 
@@ -44,7 +94,6 @@
 
         </div>
       </form>
-    </div>
 
   </body>
 </html>
