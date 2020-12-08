@@ -59,6 +59,31 @@
 
 
 <h2 style="margin-left: 40%;; align-content: center;">Fill form for coach</h2>
+<form method="POST" autocomplete="off">
+	{% csrf_token %}
+	<h1 class ="cont">Inserting coach</h1>
 
+	<div class="cont">
+	  <p>
+		<label for="coach_name">Coach Name</label>
+		<input type="text" name="coach_name" id="coach_name">
+	  </p>
+
+	  <p>
+		<label for="league_won">League Won</label>
+		<input type="text" name="league_won" id="league_won">
+	  </p>
+	  <p>
+		<label for="team_name">Team Name (short name)</label>
+		<input type="text" name="team_name" id="team_name">
+	  </p>
+
+	  <input type="submit" name="go" id="go" value="insert" class ="button">
+
+	  
+
+	</div>
+  </form>
+  <p>please fill all necessary information</p>
 </body>
 </html>

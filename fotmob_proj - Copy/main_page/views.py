@@ -48,7 +48,7 @@ def  LoginView(request):
         return render(request, 'loginPage.html');
 def  TablePoint(request):
         cursor = connection.cursor()
-        sql = "SELECT S.TEAM_ID,T.TEAM_NAME ,T.SHORT_NAME,Win(S.TEAM_ID),Draw(S.TEAM_ID),Lose(S.TEAM_ID) FROM SCORES S JOIN TEAM T ON (S.TEAM_ID = T.TEAM_ID) GROUP BY S.TEAM_ID,T.TEAM_NAME,T.SHORT_NAME "
+        sql = "SELECT S.TEAM_ID,T.TEAM_NAME ,T.SHORT_NAME,Win(S.TEAM_ID),Draw(S.TEAM_ID),Lose(S.TEAM_ID),T.FLAG FROM SCORES S JOIN TEAM T ON (S.TEAM_ID = T.TEAM_ID) GROUP BY S.TEAM_ID,T.TEAM_NAME,T.SHORT_NAME,T.FLAG "
         cursor.execute(sql)
         result = cursor.fetchall()
         cursor.close()
@@ -62,7 +62,8 @@ def  TablePoint(request):
             D = r[4]
             L = r[5]
             PL =(W+L+D)
-            row  = {'Team_id': Team_id,'Team_name': Team_name,'Short_name':Short_name,'Played':PL,'Point':Point,'Win':W,'Draw':D,'Lose':L}
+            flag_path = r[6]
+            row  = {'Team_id': Team_id,'Team_name': Team_name,'Short_name':Short_name,'Played':PL,'Point':Point,'Win':W,'Draw':D,'Lose':L,'flag_path':flag_path}
             dict.append(row);
         return render(request,'table_point.html',{'table' :dict});
 def  TeamInfo(request ,Team_id):
@@ -73,7 +74,7 @@ def  TeamInfo(request ,Team_id):
         cursor.close()
         
         cursor = connection.cursor()
-        sql = "SELECT GetGoal(%s,MATCH_ID) FROM MATCH WHERE HOME_ID =%s or AWAY_ID =%s ORDER BY DATE_ DESC;"
+        sql = "SELECT GetGoal2(%s,MATCH_ID),MATCH_ID FROM MATCH WHERE HOME_ID =%s or AWAY_ID =%s ORDER BY DATE_ DESC;"
         cursor.execute(sql,[Team_id,Team_id,Team_id])
         result2 = cursor.fetchall()
         cursor.close()
@@ -86,17 +87,104 @@ def  TeamInfo(request ,Team_id):
             row  = {'Team_id': Team_id,'Team_name': Team_name,'short_name':short_name}
             dict1.append(row);
         dict2 = [] 
+        score_list=[]
         for r in result2:
             if(r != "NULL"):
-                score = r[0]
-            row  = {'score': score}
+                score_list = r[0].split(',')
+                match_date = score_list[0]
+                h_name = score_list[1]
+                h_id = score_list[2]
+                h_goals = score_list[3]
+                a_goals =score_list[4]
+                
+                a_name =score_list[5]
+                a_id =score_list[6]
+                wl = score_list[7]
+                m_id = r[1]
+            row  = {'t1_id':h_id,'t2_id':a_id,'m_id':m_id,'m_date':match_date,'h_name':h_name,'h_goals':h_goals,'a_name':a_name,'a_goals':a_goals,'wl':wl}
             dict2.append(row);
         
         
         
-        whole_content={'team_info':dict1,'result':dict2}
+        
+        whole_content={'team_info':dict1,'result':dict2,}
 
         return render(request,'Team_info.html',{'content' :whole_content});
+def  Match_Dt_View(request,Team_1_id,Team_2_id,Matchid):
+
+        cursor = connection.cursor()
+        sql = "SELECT R.RC_NO, (SELECT FIRST_NAME||' '|| LAST_NAME FROM PLAYER WHERE PLAYER_ID =R.PL_ID)   FROM REDCARD R WHERE R.T_ID= %s AND R.MATCH_ID = %s;"
+        cursor.execute(sql,[Team_1_id,Matchid])
+        r_t1 = cursor.fetchall()
+        cursor.close()
+        
+        cursor = connection.cursor()
+        sql = "SELECT Y.YC_NO, (SELECT FIRST_NAME||' '|| LAST_NAME FROM PLAYER WHERE PLAYER_ID =Y.PL_ID)   FROM YELLOWCARD Y WHERE Y.T_ID= %s  AND Y.MATCH_ID = %s;"
+        cursor.execute(sql,[Team_1_id,Matchid])
+        y_t1 = cursor.fetchall()
+        cursor.close()
+        
+        cursor = connection.cursor()
+        sql = "SELECT R.RC_NO, (SELECT FIRST_NAME||' '|| LAST_NAME FROM PLAYER WHERE PLAYER_ID =R.PL_ID)   FROM REDCARD R WHERE R.T_ID= %s AND R.MATCH_ID = %s;"
+        cursor.execute(sql,[Team_2_id,Matchid])
+        r_t2 = cursor.fetchall()
+        cursor.close()
+        
+        cursor = connection.cursor()
+        sql = "SELECT Y.YC_NO, (SELECT FIRST_NAME||' '|| LAST_NAME FROM PLAYER WHERE PLAYER_ID =Y.PL_ID)   FROM YELLOWCARD Y WHERE Y.T_ID= %s  AND Y.MATCH_ID = %s;"
+        cursor.execute(sql,[Team_2_id,Matchid])
+        y_t2 = cursor.fetchall()
+        cursor.close()
+        
+        t1_red_list=[]
+        t2_red_list=[]
+        t1_yel_list=[]
+        t2_yel_list=[]
+        
+        for r in r_t1:
+            Name = r[1]
+            card_no = r[0]
+            t1_red_list.append({'name':Name,'card_no':card_no})
+        for r in r_t2:
+            Name = r[1]
+            card_no = r[0]
+            t2_red_list.append({'name':Name,'card_no':card_no})
+        for r in y_t1:
+            Name = r[1]
+            card_no = r[0]
+            t1_yel_list.append({'name':Name,'card_no':card_no})
+        for r in y_t2:
+            Name = r[1]
+            card_no = r[0]
+            t2_yel_list.append({'name':Name,'card_no':card_no})
+        
+        cursor = connection.cursor()
+        sql = "SELECT GetGoal2(%s,%s),(SELECT R.REFEREE_NAME FROM REFEREE R WHERE R.REFEREE_ID = M.REFEREE_ID) FROM MATCH M WHERE M.MATCH_ID = %s;"
+        cursor.execute(sql,[Team_1_id,Matchid,Matchid])
+        result2 = cursor.fetchall()
+        cursor.close()
+        
+        whole_content = []
+        dict2 = []
+        for r in result2:
+            if(r != "NULL"):
+                score_list = r[0].split(',')
+                match_date = score_list[0].split(' ')
+                date = match_date[0]
+                time = match_date[1]
+                
+                h_name = score_list[1]
+                h_id = score_list[2]
+                h_goals = score_list[3]
+                a_goals =score_list[4]
+                a_name =score_list[5]
+                a_id =score_list[6]
+                ref_name= r[1]
+                row  = {'t1_id':h_id,'t2_id':a_id,'date':date,'time':time,'h_name':h_name,'h_goals':h_goals,'a_name':a_name,'a_goals':a_goals,'ref_name':ref_name}
+                dict2.append(row);
+        whole_content={'result':dict2}
+        
+        return render(request,'Match_details.html',{'content' :dict2,'t1_r':t1_red_list,'t2_r':t2_red_list,'t1_y':t1_yel_list,'t2_y':t2_yel_list});
 def  CompareUtilView(request):
         
         return render(request,'compare.html');

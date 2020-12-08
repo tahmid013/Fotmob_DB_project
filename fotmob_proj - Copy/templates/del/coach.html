@@ -61,7 +61,6 @@
 <h2 style="margin-left: 40%;; align-content: center;">Coach</h2>
 <table width="100%"  border="1">
     <tr style="background-color:lightgray">
-        <th>ID</th>
         <th>Coach Name</th>
 		<th>league_won</th>
 		<th>Team name</th>
@@ -69,12 +68,12 @@
     </tr>
     {% for player_each in cont.type %}
        <tr>
-           <td>{{player_each.coach_id}}</td>
            <td>{{player_each.coach_name}}</td>
 		   <td>{{player_each.league_won}}</td>
 		   <td>{{player_each.team_name}}</td>
 			<td>
 			<a href="{%url 'util_d' cont.list.name player_each.coach_id%}">Delete</a>
+			<a href="{%url 'c_up'  player_each.coach_id%}">Update</a>
 				
 			</td>
        </tr>

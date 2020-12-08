@@ -58,7 +58,29 @@
 </header>
 
 
-<h2 style="margin-left: 40%;; align-content: center;">Fill form</h2>
+<h2 style="margin-left: 40%;; align-content: center;">Fill form for stadium</h2>
 
+<form method="POST" autocomplete="off">
+	{% csrf_token %}
+	<h1 class ="cont">Inserting stadium</h1>
+
+	<div class="cont">
+	  <p>
+		<label for="st_name">Stadium Name</label>
+		<input type="text" name="st_name" id="st_name">
+	  </p>
+
+	  <p>
+		<label for="cap">Capacity</label>
+		<input type="text" name="cap" id="cap">
+	  </p>
+	  
+	  <input type="submit" name="go" id="go" value="insert" class ="button">
+
+	  
+
+	</div>
+  </form>
+  <p>please fill all necessary information</p>
 </body>
 </html>

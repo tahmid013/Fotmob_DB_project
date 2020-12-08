@@ -69,7 +69,11 @@
     </tr>
     {% for team_each in table %}
        <tr>
-           <td><a href="{%url 'team_info' team_each.Team_id %}">{{team_each.Team_name}}</a></td>
+			{%if true%}
+			path = {{team_each.flag_path}}
+			{%endif%}
+			
+           <td><img src="{{team_each.flag_path}}">HI  {{team_each.flag_path}}  <a href="{%url 'team_info' team_each.Team_id %}">{{team_each.Team_name}}</a></td>
 		   <td>{{team_each.Played }}</td>
 		   <td>{{team_each.Win }}</td>
 		   <td>{{team_each.Draw }}</td>

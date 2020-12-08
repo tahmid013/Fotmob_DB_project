@@ -58,7 +58,44 @@
 </header>
 
 
-<h2 style="margin-left: 40%;; align-content: center;">Fill form</h2>
+<h2 style="margin-left: 40%;; align-content: center;">Fill form Match</h2>
+<form method="POST" autocomplete="off">
+	{% csrf_token %}
+	<h1 class ="cont">Inserting match</h1>
 
+	<div class="cont">
+	  <p>
+		<label for="date">Date</label>
+		<input type="text" name="date" id="date" value="{{row.date}}">
+	  </p>
+
+	  <p>
+		<label for="attendance">Attendance</label>
+		<input type="text" name="attendance" id="attendance" value="{{row.attendance}}">
+	  </p>
+	  <p>
+		<label for="referee_name">Referee Name</label>
+		<input type="text" name="referee_name" id="referee_name" value="{{row.r_name}}">
+	  </p>
+
+	  <p>
+		<label for="stadium_name">Stadium Name</label>
+		<input type="text" name="stadium_name" id="stadium_name" value="{{row.s_name}}">
+	  </p>
+	  <p>
+		<label for="home_t">HOME Team (short name)</label>
+		<input type="text" name="home_t" id="home_t" value="{{row.h_name}}">
+	  </p>
+	  <p>
+		<label for="away_t">AWAY Team (short name)</label>
+		<input type="text" name="away_t" id="away_t" value="{{row.a_name}}">
+	  </p>
+	   <input type="submit" name="go" id="go" value="update" class ="button">
+
+	  
+
+	</div>
+  </form>
+  <p>please fill all ncessary information</p>
 </body>
 </html>

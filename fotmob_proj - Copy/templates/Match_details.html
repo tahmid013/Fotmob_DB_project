@@ -40,6 +40,18 @@
 	#table_1{
 		margin-top: 50px;
 	}
+	#both{
+		width:100%;
+	}
+	
+	#left_pl,#right_pl{
+		float: left;
+		width:50%;
+	}
+	h2{
+		float: left;
+		width: 50%;
+	}
 </style>
 <body>
 <header id ="header_name">     
@@ -56,40 +68,63 @@
           
          
 </header>
+<section id ="content">
+	{%for r in content%}
+
+	<h3>Date: {{ r.date}}</h3>
+	<h3>Time: {{ r.time}}</h3>
+	<h4>Referee : {{r.ref_name}}</h4>
+	<h2 >Team1 : {{ r.h_name}} </h2>
+	<h2 >Team2: {{ r.a_name}}</h2>
+	{%endfor%}
+
+	<div id ="both">
+		
+		<div id ="right_pl">
+			{%for r in content%}
+			<div>Goals : {{r.h_goals}}</div>
+		
+			{%endfor%}
+			<h4>Red Card</h4>
+			
+			{%for r in t1_r%}
+			<div> {{r.name}}</div>
+			<div>{{r.card_no}}</div>
+			{%endfor%}
+			<hr>
+			<h4>Yellow Card</h4>
+			
+			{%for r in t1_y%}
+			<div> {{r.name}}</div>
+			<div>{{r.card_no}}</div>
+			{%endfor%}
+			<hr>
+		</div>
+		<div id ="left_pl">
+			{%for r in content%}
+			
+			<div>Goals : {{r.a_goals}}</div>
+		
+			{%endfor%}
+			<h4>Red Card</h4>
+			
+			{%for r in t2_r%}
+			<div> {{r.name}}</div>
+			<div>{{r.card_no}}</div>
+			{%endfor%}
+			<hr>
+			<h4>Yellow Card</h4>
+			
+			{%for r in t2_y%}
+			<div> {{r.name}}</div>
+			<div>{{r.card_no}}</div>
+			{%endfor%}
+			<hr>
+		</div>
+		<div>
 
 
-<h1 id ="table_1">Player</h1>
+</section>
 
-<table width="100%"  border="1">
-    <tr style="background-color:hsl(0, 0%, 83%)">
-        <th>First_Name</th>
-        <th>Last_Name</th>
-        <th>Position</th>
-        <th>Minutes_played</th>
-        <th>Red_card</th>
-        <th>Yellow_card</th>
-        <th>Country</th>
-        <th>Team_id</th>
-        <th>Edit</th>
-    </tr>
-    {% for player_each in cont.type %}
-       <tr>
-           <td>{{player_each.First_name}}</td>
-           <td>{{player_each.Last_name}}</td>
-           <td>{{player_each.Position}}</td>
-           <td>{{player_each.Minutes_played}}</td>
-           <td>{{player_each.Red_card}}</td>
-           <td>{{player_each.Yellow_card}}</td>
-           <td>{{player_each.Country}}</td>
-           <td>{{player_each.Team_id}}</td>
-			<td>
-			<a href="{%url 'util_d' cont.list.name player_each.player_id%}">Delete</a>
-			<a href="{%url 'pl_up' player_each.player_id%}">Update</a>	
-            </td>
-            
-       </tr>
-    {% endfor %}
-
-</table>
 </body>
 </html>

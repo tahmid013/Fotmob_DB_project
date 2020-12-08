@@ -13,5 +13,6 @@ urlpatterns = [
     path('main_/player/', include('player.url')),
     path('/admin', include('admin.url')),
     path('/insert_',views.InsertView,name='insert1'),
+    path('/details/<slug:Team_1_id>/<slug:Team_2_id>/<slug:Matchid>',views.Match_Dt_View,name='match_dt'),
     
 ]   

@@ -58,7 +58,8 @@ def  PlayerInsView(request):
             if(flag == False):
                 return render(request, 'ins/success.html',{'type':name});
         else:
-            return render(request, 'ins/player.html');
+            pl = 'Anan'
+            return render(request, 'ins/player.html',{'pl':pl});
 def  MatchInsView(request):
         if(request.method == 'POST'):
             date = request.POST['date']
@@ -224,7 +225,7 @@ def  TeamInsView(request):
             short_name = request.POST['s_name']
             
             
-            flag = True;
+            flag = False;
             
             cursor = connection.cursor()
             sql = 'SELECT TEAM_NAME, SHORT_NAME FROM TEAM;'
@@ -255,11 +256,121 @@ def  TeamInsView(request):
             return render(request, 'ins/team.html');
         return render(request, 'ins/team.html');
 def  CoachInsView(request):
-       
-        return render(request, 'ins/coach.html');
+        if(request.method == 'POST'):
+            coach_name = request.POST['coach_name']
+            league_won = request.POST['league_won']
+            team_name = request.POST['team_name']
+            
+            flag = False;
+            t_id = -1
+            cursor = connection.cursor()
+            sql = 'SELECT TEAM_ID FROM TEAM WHERE SHORT_NAME = %s;'
+            cursor.execute(sql,[team_name])
+            team_data = cursor.fetchall()
+            cursor.close()
+            
+            cursor = connection.cursor()
+            sql = 'SELECT COACH_NAME FROM COACH ;'
+            cursor.execute(sql)
+            coaches = cursor.fetchall()
+            cursor.close()
+            
+            if(team_name == "" or coach_name == "" or league_won == ""):
+                    flag = True
+            
+            for r  in coaches:
+                if(r[0] == coach_name ):
+                    flag = True
+                    break
+            for r in team_data:
+                t_id = r[0]
+            if(flag == False):
+                cursor = connection.cursor()
+                sql = 'INSERT INTO COACH(COACH_NAME,LEAGUE_WON,TEAM_ID) VALUES(%s,%s,%s);'
+                cursor.execute(sql,[coach_name,league_won,t_id])
+                connection.commit()
+                cursor.close()
+            name = 'coach'
+            if(flag == True):
+                return render(request, 'ins/failed.html',{'type':name});
+            if(flag == False):
+                return render(request, 'ins/success.html',{'type':name});
+        else:
+            return render(request, 'ins/coach.html');
+        
 def  RefereeInsView(request):
-       
-        return render(request, 'ins/referee.html');
+        if(request.method == 'POST'):
+            ref_name = request.POST['ref_name']
+            match_cont = request.POST['match_cont']
+            
+            
+            flag = False;
+            
+           
+            
+            cursor = connection.cursor()
+            sql = 'SELECT REFEREE_ID FROM REFEREE ;'
+            cursor.execute(sql)
+            ref = cursor.fetchall()
+            cursor.close()
+            
+            if(match_cont == "" or ref_name == "" ):
+                    flag = True
+            
+            for r  in ref:
+                if(r[0] == ref_name ):
+                    flag = True
+                    break
+            
+            if(flag == False):
+                cursor = connection.cursor()
+                sql = 'INSERT INTO REFEREE(REFEREE_NAME,MATCH_CONTROLLED) VALUES(%s,%s);'
+                cursor.execute(sql,[ref_name,match_cont])
+                connection.commit()
+                cursor.close()
+            name = 'referee'
+            if(flag == True):
+                return render(request, 'ins/failed.html',{'type':name});
+            if(flag == False):
+                return render(request, 'ins/success.html',{'type':name});
+        else:
+            return render(request, 'ins/referee.html');
+        
 def  StadiumInsView(request):
-       
-        return render(request, 'ins/stadium.html');
+        if(request.method == 'POST'):
+            st_name = request.POST['st_name']
+            cap = request.POST['cap']
+            
+            
+            flag = False;
+            
+           
+            
+            cursor = connection.cursor()
+            sql = 'SELECT STADIUM_ID FROM STADIUM ;'
+            cursor.execute(sql)
+            st = cursor.fetchall()
+            cursor.close()
+            
+            if(cap == "" or st_name == "" ):
+                    flag = True
+            
+            for r  in st:
+                if(r[0] == st_name ):
+                    flag = True
+                    break
+            
+            if(flag == False):
+                cursor = connection.cursor()
+                sql = 'INSERT INTO STADIUM(STADIUM_NAME,CAPACITY) VALUES(%s,%s);'
+                cursor.execute(sql,[st_name,cap])
+                connection.commit()
+                cursor.close()
+            name = 'stadium'
+            if(flag == True):
+                return render(request, 'ins/failed.html',{'type':name});
+            if(flag == False):
+                return render(request, 'ins/success.html',{'type':name});
+        else:
+            return render(request, 'ins/stadium.html');
+        

@@ -9,6 +9,6 @@ urlpatterns = [
     path('/score_',views.ScoreDelView,name='score_d'),
     path('/team_',views.TeamDelView,name='team_d'),
     path('/coach_',views.CoachDelView,name='coach_d'),
-    path('/util/<x>/<y>',views.UtilDelView , name ='util_d')
-    
+    path('/util/<x>/<y>',views.UtilDelView , name ='util_d'),
+    path('/update', include('update.url')),
 ]   

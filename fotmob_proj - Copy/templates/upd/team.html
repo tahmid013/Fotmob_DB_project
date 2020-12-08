@@ -40,6 +40,12 @@
 	#table_1{
 		margin-top: 50px;
 	}
+	.cont{
+		margin-left: 50px;
+	}
+	.cont p label{
+		margin-right: 70px;
+	}
 </style>
 <body>
 <header id ="header_name">     
@@ -58,7 +64,28 @@
 </header>
 
 
-<h2 style="margin-left: 40%;; align-content: center;">Fill form</h2>
+<h2 style="margin-left: 40%;; align-content: center;">Fill form TEAM</h2>
+<form method="POST" autocomplete="off">
+	{% csrf_token %}
+	<h1 class ="cont">Inserting TEAM</h1>
 
+	<div class="cont">
+	  <p>
+		<label for="t_name">Team Name</label>
+		<input type="text" name="t_name" id="t_name">
+	  </p>
+
+	  <p>
+		<label for="s_name">short Name</label>
+		<input type="text" name="s_name" id="s_name">
+	  </p>
+	  
+	  <input type="submit" name="go" id="go" value="insert" class ="button">
+
+	  
+
+	</div>
+  </form>
+  <p>please fill all ncessary information</p>
 </body>
 </html>

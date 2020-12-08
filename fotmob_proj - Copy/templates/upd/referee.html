@@ -58,7 +58,28 @@
 </header>
 
 
-<h2 style="margin-left: 40%;; align-content: center;">Fill form</h2>
+<h2 style="margin-left: 40%;; align-content: center;">Fill form for referee</h2>
+<form method="POST" autocomplete="off">
+	{% csrf_token %}
+	<h1 class ="cont">Inserting referee</h1>
 
+	<div class="cont">
+	  <p>
+		<label for="ref_name">Referee Name</label>
+		<input type="text" name="ref_name" id="ref_name">
+	  </p>
+
+	  <p>
+		<label for="match_cont">Match Controlled</label>
+		<input type="text" name="match_cont" id="match_cont">
+	  </p>
+	  
+	  <input type="submit" name="go" id="go" value="insert" class ="button">
+
+	  
+
+	</div>
+  </form>
+  <p>please fill all necessary information</p>
 </body>
 </html>

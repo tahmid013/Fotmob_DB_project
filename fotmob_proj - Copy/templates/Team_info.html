@@ -40,6 +40,30 @@
 	#table_1{
 		margin-top: 50px;
 	}
+	#info{
+		margin: 20px;;
+		padding: 20px;
+	}
+	#both{
+		position: absolute;
+		width:100%;
+	}
+	#left{
+		float: left;
+		width:20%;
+	}
+	#right{
+		float: left;
+		width:30%;
+	}
+	#r_m{
+		float: right;
+		width:10%;
+	}
+	#half{
+		float: left;
+		width:50%;
+	}
 </style>
 <body>
 <header id ="header_name">     
@@ -74,8 +98,36 @@
     </tr>
     {% for res in content.result %}
        <tr>
-           <td>{{res.score}}</td>
-           
+           <td id ="info">
+			<a href ="{%url 'match_dt' res.t1_id res.t2_id res.m_id%}">
+
+			   <div id="left">{{res.m_date}}</div>
+			   <div id="right">
+				   <span>
+					   <div id="half">
+						   {{res.h_name}}
+					   </div>
+					   <div id="half">
+						{{res.h_goals}}
+					</div>
+				   </span>
+				   
+			   </div>
+			   <div id="right">
+				<span>
+					<div id="half">
+						{{res.a_goals}}
+					</div>
+					<div  id="half">
+					 {{res.a_name}}
+				 </div>
+				</span>
+				
+			</div>
+			<div id="r_m">{{res.wl}}</div>
+		</a>
+		   </td>
+
        </tr>
     {% endfor %}
 
