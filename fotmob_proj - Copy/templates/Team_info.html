@@ -92,15 +92,16 @@
 
 
 <table width="100%"  border="1">
-    <tr style="background-color:lightgray">
+	<tr style="background-color:lightgray">
+		<th>id</th>
         <th>result</th>
         
     </tr>
     {% for res in content.result %}
        <tr>
            <td id ="info">
+			  
 			<a href ="{%url 'match_dt' res.t1_id res.t2_id res.m_id%}">
-
 			   <div id="left">{{res.m_date}}</div>
 			   <div id="right">
 				   <span>

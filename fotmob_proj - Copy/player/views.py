@@ -74,7 +74,7 @@ def  CoachView(request,coach_id):
         return render(request,'coach_info.html',{'coach_details' :dict1});
 def  PlayerView(request,player_id):
         cursor = connection.cursor()
-        sql = "SELECT * FROM PLAYER WHERE PLAYER_id = %s"
+        sql = "SELECT PLAYER_ID,FIRST_NAME,LAST_NAME,Position,Minutes_played,NVL((SELECT SUM(RC_NO) FROM REDCARD WHERE PL_ID = PLAYER_ID GROUP BY PL_ID ),0),NVL((SELECT SUM(YC_NO) FROM YELLOWCARD WHERE PL_ID = PLAYER_ID GROUP BY PL_ID ),0),COUNTRY,TEAM_ID FROM PLAYER WHERE PLAYER_id = %s"
         cursor.execute(sql,[ player_id])
         result1 = cursor.fetchall()
         cursor.close()

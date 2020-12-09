@@ -258,14 +258,11 @@ def CView(request,c_id):
                     name = r2[0]
                     lg_won = r2[1]
                     team_name = r2[2]
-                    
-                    
-                    
             
             row ={
             'name':name,
             'lg_won':lg_won,
-            'team_name':team_name,#
+            'team_name':team_name,
             
             }
             return render(request,  'upd/coach.html',{'row': row});

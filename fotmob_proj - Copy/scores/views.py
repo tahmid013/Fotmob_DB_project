@@ -70,29 +70,29 @@ def AssistsView(request):
 
 def RedView(request):
     cursor = connection.cursor()
-    sql = "    SELECT P.FIRST_NAME||' '||P.LAST_NAME AS FULL_name, T.TEAM_NAME ,RED_CARD FROM PLAYER P  JOIN TEAM T ON (P.TEAM_ID = T.TEAM_ID) ORDER BY RED_CARD DESC;"
+    sql = "SELECT SUM(R.RC_NO),(SELECT FIRST_NAME||' '||LAST_NAME FROM PLAYER WHERE PLAYER_ID = R.PL_ID ),(SELECT TEAM_NAME FROM TEAM WHERE TEAM_ID = R.T_ID ) FROM REDCARD R GROUP BY R.PL_ID,R.T_ID  ORDER BY SUM(R.RC_NO) DESC;"
     cursor.execute(sql)
     result = cursor.fetchall()
     cursor.close()
     dict_result = []
     for r in result:
-        Full_name = r[0]
-        Team_name = r[1]
-        total_red = r[2]
+        Full_name = r[1]
+        Team_name = r[2]
+        total_red = r[0]
         row = {'Full_name':Full_name, 'Team_name':Team_name, 'total_red':total_red}
         dict_result.append(row)
     return render(request,'red_page.html',{'stats' : dict_result})
 def YellowView(request):
     cursor = connection.cursor()
-    sql = "SELECT P.FIRST_NAME||' '||P.LAST_NAME AS FULL_name, T.TEAM_NAME ,YELLOW_CARD FROM PLAYER P  JOIN TEAM T ON (P.TEAM_ID = T.TEAM_ID) ORDER BY YELLOW_CARD DESC;"
+    sql = "SELECT SUM(Y.YC_NO),(SELECT FIRST_NAME||' '||LAST_NAME FROM PLAYER WHERE PLAYER_ID = Y.PL_ID ),(SELECT TEAM_NAME FROM TEAM WHERE TEAM_ID = Y.T_ID ) FROM YELLOWCARD Y GROUP BY Y.PL_ID,Y.T_ID  ORDER BY SUM(Y.YC_NO) DESC;"
     cursor.execute(sql)
     result = cursor.fetchall()
     cursor.close()
     dict_result = []
     for r in result:
-        Full_name = r[0]
-        Team_name = r[1]
-        total_yellow = r[2]
+        Full_name = r[1]
+        Team_name = r[2]
+        total_yellow = r[0]
         row = {'Full_name':Full_name, 'Team_name':Team_name, 'total_yellow':total_yellow}
         dict_result.append(row)
     return render(request,'yellow_page.html',{'stats' : dict_result})

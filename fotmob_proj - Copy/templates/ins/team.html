@@ -65,7 +65,7 @@
 
 
 <h2 style="margin-left: 40%;; align-content: center;">Fill form TEAM</h2>
-<form method="POST" autocomplete="off">
+<form method="POST" autocomplete="off" enctype="multipart/form-data">
 	{% csrf_token %}
 	<h1 class ="cont">Inserting TEAM</h1>
 
@@ -79,6 +79,7 @@
 		<label for="s_name">short Name</label>
 		<input type="text" name="s_name" id="s_name">
 	  </p>
+	  <input type="file" name="image">
 	  
 	  <input type="submit" name="go" id="go" value="insert" class ="button">
 

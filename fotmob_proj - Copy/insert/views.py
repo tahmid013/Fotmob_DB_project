@@ -223,8 +223,17 @@ def  TeamInsView(request):
         if(request.method == 'POST'):
             team_name = request.POST['t_name']
             short_name = request.POST['s_name']
-            
-            
+            """
+            file =request.FILES.get('image',False)
+            file_url =""
+            if file:
+                fs = FileSystemStorage()
+                f_new_path = fs.save(file.name, file)
+                file_url = fs.url(f_new_path)
+            """
+            file ='images/flag/'
+            file += str(request.FILES.get('image',False))
+            print(file)
             flag = False;
             
             cursor = connection.cursor()
@@ -243,8 +252,8 @@ def  TeamInsView(request):
             
             if(flag == False):
                 cursor = connection.cursor()
-                sql = 'INSERT INTO TEAM(TEAM_NAME,SHORT_NAME) VALUES(%s,%s);'
-                cursor.execute(sql,[team_name,short_name])
+                sql = 'INSERT INTO TEAM(TEAM_NAME,SHORT_NAME,flag) VALUES(%s,%s,%s);'
+                cursor.execute(sql,[team_name,short_name,file])
                 connection.commit()
                 cursor.close()
             name = 'team'

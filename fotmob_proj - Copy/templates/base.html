@@ -27,13 +27,12 @@
       margin: 10px;
     }
     #option{
-      position: absolute;
       margin: 10px;
       width: 100%;
     }
     #option .left{
       float: left;
-      margin-top:10px;
+      margin-top:30px;
       margin-right:50px;  
       border: 2px solid blue;
       background-color: white;
@@ -43,7 +42,7 @@
     }
     #_login{
       float: right;
-      margin-top:10px;
+      margin-top:30px;
       margin-right:50px;  
       border: 2px solid blue;
       background-color: white;
@@ -54,6 +53,11 @@
       margin-top:10px;
       margin-right:50px; 
     }
+    #right_{
+      float: right;
+      margin-top:30px;
+      margin-right:50px; 
+    }
     #table_1{
       margin-top: 50px;
     }
@@ -61,6 +65,33 @@
       width: 50px;
       height: 50px;
     }
+    #table_1{
+		margin-top: 50px;
+	}
+	#info{
+		margin: 20px;;
+		padding: 20px;
+	}
+	#both{
+		position: absolute;
+		width:100%;
+	}
+	#left{
+		float: left;
+		width:15%;
+	}
+	#right{
+		float: left;
+		width:20%;
+	}
+	#r_m{
+		float: right;
+		width:5%;
+	}
+	#half{
+		float: left;
+		width:20%;
+	}
   </style>
   <body>
     <!--navbutton-->
@@ -80,13 +111,63 @@
         {%if user != ""%}
             <div class="left"><a href=" {% url 'adminop' %} " class="">Edit</a></div>
             <div id="_login"><a href=" {% url 'logout' %} " class="">Logout</a></div>   
-            <div id="right">logged in as {{user}}</div>
+            <div id="right_">logged in as {{user}}</div>
         {%else%} 
         <div id="_login"><a href=" {% url 'login' %} " class="">Login {{user}}</a></div>
         {%endif%}
         
       </div>
       </section>
-    </header>
+      </header>
+      <section id ="content">
+
+        <h1 id ="table_1">Recent Match</h1>
+        {%load static%}
+        
+        <table width="100%"  border="1">
+            <tr style="background-color:lightgray">
+                <th>result</th>
+                
+            </tr>
+            {% for res in matches %}
+               <tr>
+                   <td id ="info">
+              <a href ="{%url 'match_dt' res.t1_id res.t2_id res.m_id%}">
+        
+                 <div id="left">{{res.m_date}}</div>
+                 <div id="right">
+                  <img id ="half" src="{% static res.h_path %}">
+                   <span>
+                     <div id="half">
+                       {{res.h_name}}
+                     </div>
+                     <div id="half">
+                    {{res.h_goals}}
+                  </div>
+                   </span>
+                   
+                 </div>
+                 <div id="right">
+                <span>
+                  <div id="half">
+                    {{res.a_goals}}
+                  </div>
+                  <div  id="half">
+                   {{res.a_name}}
+                 </div>
+                </span>
+                <img id ="half" src="{% static res.a_path %}">
+              </div>
+              <div id="r_m">{{res.wl}}</div>
+            </a>
+               </td>
+        
+               </tr>
+            {% endfor %}
+        
+        </table>
+        
+        </section>
+    
   </body>
 </html>
