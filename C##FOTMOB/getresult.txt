@@ -1,0 +1,67 @@
+CREATE OR REPLACE FUNCTION GetResult( M_id IN NUMBER)
+RETURN VARCHAR2 IS 
+		
+		P_date DATE;
+		goals_home NUMBER;
+		goals_away NUMBER;
+		MSG NUMBER;
+		Awayid NUMBER;
+		Homeid NUMBER;
+		Home_name VARCHAR2(20);
+		Away_name VARCHAR2(20);
+		I NUMBER;
+		RESULT VARCHAR2 (100);
+BEGIN
+		Awayid:=-1;
+		Home_name:='';
+		Away_name:='';
+		Homeid:=-1;
+		goals_home:=0;
+		goals_away:=0;
+		FOR R IN (SELECT HOME_ID, AWAY_ID,DATE_  FROM MATCH  WHERE MATCH_ID = M_id )
+		LOOP
+				P_date := R.DATE_;
+				Awayid := R.AWAY_ID;
+				
+				Homeid := R.HOME_ID;
+		END LOOP;
+		FOR R IN (SELECT SHORT_NAME FROM TEAM WHERE TEAM_ID = Awayid)
+		LOOP
+				Away_name:=R.SHORT_NAME;
+		END LOOP;
+		FOR R IN (SELECT SHORT_NAME FROM TEAM WHERE TEAM_ID = Homeid)
+		LOOP
+				Home_name:=R.SHORT_NAME;
+		END LOOP;
+		
+		FOR R IN  (SELECT M.DATE_  AS match_date,SUM(S.GOALS) as goals FROM MATCH M JOIN SCORES S ON (M.MATCH_ID = Homeid) WHERE (S.TEAM_ID = Homeid AND M.MATCH_ID = M_id) GROUP BY S.MATCH_ID,S.TEAM_ID,M.DATE_ ORDER BY DATE_)
+		LOOP
+				goals_home := R.goals;
+		END LOOP;
+		FOR R IN  (SELECT M.DATE_ AS match_date2,SUM(S.GOALS) AS goals2 FROM MATCH M JOIN SCORES S ON (M.MATCH_ID = S.MATCH_ID) WHERE (S.TEAM_ID = Awayid AND M.MATCH_ID = M_id) GROUP BY S.MATCH_ID,S.TEAM_ID,M.DATE_ ORDER BY DATE_)
+		LOOP 
+				goals_away := R.goals2;
+		END LOOP;
+		
+		
+		RESULT :=P_date||','||Home_name ||','||Homeid ||','||goals_home||','||goals_away||','||Away_name||','||Awayid ;
+		
+		RETURN RESULT;
+		--RETURN ' done';
+
+
+		
+EXCEPTION
+		--you must return value from this section also
+		WHEN NO_DATA_FOUND THEN
+				RETURN 'No goal scored found.' ;
+		WHEN TOO_MANY_ROWS THEN
+				RETURN 'Invalid for too many row.' ;
+		WHEN OTHERS THEN
+				RETURN 'NULL' ;
+END ;
+/
+ 
+BEGIN 
+	DBMS_OUTPUT.PUT_LINE(GetGoal(2,1));
+END;
