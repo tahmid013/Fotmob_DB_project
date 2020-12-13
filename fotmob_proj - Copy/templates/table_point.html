@@ -51,7 +51,7 @@
     <h1 >Fotmob</h1>
     <section id ="option">
 		<div class="left"><a href="{% url 'index' %}">Home</a></div>
-    	<div class="left"><a href="{% url 'scores' %}">Scores</a></div>
+    	<div class="left"><a href="{% url 'scores' %}">Statistics</a></div>
     	<div class="left"><a href="{% url 'table' %}">Table</a></div>
     </section>
             
@@ -60,11 +60,11 @@
 </header>
 <section id ="content">
 	{%load static%}
-<h1 id ="table_1">Table Point</h1>
+<h1 id ="table_1">Point Table</h1>
 
 <table width="100%"  border="1">
     <tr style="background-color:lightgray">
-        <th>Team_name</th>
+        <th>Team Name</th>
 		<th>PL</th>
 		<th>W</th>
 		<th>D</th>
@@ -75,7 +75,7 @@
        <tr>
 		
 			
-           <td><img id ="size" src="{% static team_each.flag_path %}"><a href="{%url 'team_info' team_each.Team_id %}"> {{team_each.Team_id}} {{team_each.Team_name}}</a></td>
+           <td><img id ="size" src="{% static team_each.flag_path %}"><a href="{%url 'team_info' team_each.Team_id %}"> {{team_each.Team_name}}</a></td>
 		   <td>{{team_each.Played }}</td>
 		   <td>{{team_each.Win }}</td>
 		   <td>{{team_each.Draw }}</td>

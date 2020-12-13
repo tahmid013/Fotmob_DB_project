@@ -28,9 +28,10 @@
 		position: absolute;
 		margin: 10px;
 	}
-	#option .left{
+	.left{
 		float: left;
 		margin-top:10px;
+		margin-left: 10px;
 		margin-right:50px;  
 		border: 2px solid blue;
 		background-color: white;
@@ -48,7 +49,7 @@
     <section id ="option">
         
         <div class="left"><a href="{% url 'index' %}">Home</a></div>
-    	<div class="left"><a href="{% url 'scores' %}">Scores</a></div>
+    	<div class="left"><a href="{% url 'scores' %}">Statistics</a></div>
         <div class="left"><a href="{% url 'table' %}">Table</a></div>
         
     </section>
@@ -59,15 +60,17 @@
 
 
 <h2 style="margin-left: 40%;; align-content: center;">Choose  option  for insert</h2>
-<ul>
-    <li><a href = "{%url 'player'%}">player</a></li>
-    <li><a href = "{%url 'match'%}">match</a></li>
-    <li><a href = "{%url 'referee'%}">referee</a></li>
-    <li><a href = "{%url 'scores_ins'%}">scores</a></li>
-    <li><a href = "{%url 'stadium'%}">stadium</a></li>
-    <li><a href = "{%url 'team'%}">team</a></li>
-    <li><a href = "{%url 'coach'%}">coach</a></li>
-  </ul>
+
+    <div class="left"><a href = "{%url 'player'%}">player</a></div>
+    <div class="left"><a href = "{%url 'match'%}">match</a></div>
+    <div class="left"><a href = "{%url 'referee'%}">referee</a></div>
+    <div class="left"><a href = "{%url 'scores_ins'%}">scores</a></div>
+    <div class="left"><a href = "{%url 'stadium'%}">stadium</a></div>
+    <div class="left"><a href = "{%url 'team'%}">team</a></div>
+	<div class="left"><a href = "{%url 'coach'%}">coach</a></div>
+	<div class="left"><a href = "{%url 'red_ins'%}">Red card</a></div>
+	<div class="left"><a href = "{%url 'y_ins'%}">Yellow card</a></div>
+
 
 </body>
 </html>

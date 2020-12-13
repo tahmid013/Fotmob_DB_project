@@ -28,7 +28,7 @@
 		position: absolute;
 		margin: 10px;
 	}
-	#option .left{
+	.left{
 		float: left;
 		margin-top:10px;
 		margin-right:50px;  
@@ -48,7 +48,7 @@
     <section id ="option">
         
         <div class="left"><a href="{% url 'index' %}">Home</a></div>
-    	<div class="left"><a href="{% url 'scores' %}">Scores</a></div>
+    	<div class="left"><a href="{% url 'scores' %}">Statistics</a></div>
         <div class="left"><a href="{% url 'table' %}">Table</a></div>
         
     </section>
@@ -58,13 +58,13 @@
 </header>
 
 
-<h2 style="margin-left: 40%;; align-content: center;">Choose  option for delete</h2>
+<h2 style="margin-left: 40%;; align-content: center;">Choose  option for Editing</h2>
 <ul>
-    <li><a href = "{%url 'player_d'%}">player</a></li>
-    <li><a href = "{%url 'match_d'%}">match</a></li>
-    <li><a href = "{%url 'score_d'%}">scores</a></li>
-    <li><a href = "{%url 'team_d'%}">team</a></li>
-    <li><a href = "{%url 'coach_d'%}">coach</a></li>
+    <div class="left"><a href = "{%url 'player_d'%}">player</a></div>
+    <div class="left"><a href = "{%url 'match_d'%}">match</a></div>
+    <div class="left"><a href = "{%url 'score_d'%}">scores</a></div>
+    <div class="left"><a href = "{%url 'team_d'%}">team</a></div>
+    <div class="left"><a href = "{%url 'coach_d'%}">coach</a></div>
   </ul>
 
 </body>

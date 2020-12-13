@@ -28,7 +28,7 @@
 		position: absolute;
 		margin: 10px;
 	}
-	#option .left{
+	 .left{
 		float: left;
 		margin-top:10px;
 		margin-right:50px;  
@@ -48,7 +48,7 @@
     <section id ="option">
         
         <div class="left"><a href="{% url 'index' %}">Home</a></div>
-    	<div class="left"><a href="{% url 'scores' %}">Scores</a></div>
+    	<div class="left"><a href="{% url 'scores' %}">Statistics</a></div>
         <div class="left"><a href="{% url 'table' %}">Table</a></div>
         
     </section>
@@ -60,8 +60,8 @@
 
 <h2 style="margin-left: 40%;; align-content: center;">Choose  option</h2>
 <ul>
-<li class="left"><a href="{% url 'insert' %}">Insert</a></li>
-<li class="left"><a href="{% url 'delete' %}">Edit info</a></li>
+<div class="left"><a href="{% url 'insert' %}">Insert</a></div>
+<div class="left"><a href="{% url 'delete' %}">Edit info</a></div>
 
 </ul>
 </body>

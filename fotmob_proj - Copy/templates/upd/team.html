@@ -65,22 +65,27 @@
 
 
 <h2 style="margin-left: 40%;; align-content: center;">Fill form TEAM</h2>
-<form method="POST" autocomplete="off">
+<form method="POST" autocomplete="off"  enctype="multipart/form-data">
 	{% csrf_token %}
-	<h1 class ="cont">Inserting TEAM</h1>
+	<h1 class ="cont">Updating TEAM</h1>
 
 	<div class="cont">
 	  <p>
 		<label for="t_name">Team Name</label>
-		<input type="text" name="t_name" id="t_name">
+		<input type="text" name="t_name" id="t_name" value ="{{row.team_name}}">
 	  </p>
 
 	  <p>
 		<label for="s_name">short Name</label>
-		<input type="text" name="s_name" id="s_name">
+		<input type="text" name="s_name" id="s_name"  value ="{{row.short_name}}" >
 	  </p>
 	  
-	  <input type="submit" name="go" id="go" value="insert" class ="button">
+	  <p>
+		
+		<input type="file" name="fl_path" value="{{row.path}}" >
+	  </p>
+	  
+	  <input type="submit" name="go" id="go" value="update" class ="button">
 
 	  
 

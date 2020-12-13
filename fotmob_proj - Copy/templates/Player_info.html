@@ -1,79 +1,119 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="templates/css/bootstrap.min.css">
-    <link rel="stylesheet" href="templates/css/styles.css">
-    <title>main_page...</title>
-    
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="templates/css/bootstrap.min.css">
+	<link rel="stylesheet" href="templates/css/styles.css">
+	<title>main_page...</title>
+
 </head>
 <style type="text/css">
 	body {
 		background-color: #e6d195;
 		padding: 0px;
-		margin:0px;
+		margin: 0px;
 	}
-	#header_name{
+
+	#header_name {
 		background-color: #12CC32;
 		padding-top: 20px;
 		padding-bottom: 5px;
 		margin-bottom: 50px;
 	}
-	#content{
+
+	#content {
 		margin-top: 300px;
 		margin: 10px;
 	}
-	#option{
+
+	#option {
 		position: absolute;
 		margin: 10px;
 	}
-	#option .left{
+
+	#option .left {
 		float: left;
-		margin-top:10px;
-		margin-right:50px;  
+		margin-top: 10px;
+		margin-right: 50px;
 		border: 2px solid blue;
 		background-color: white;
 		color: white;
 
 	}
-	#table_1{
+
+	#table_1 {
 		margin-top: 50px;
 	}
+
+	img {
+		width: 100px;
+		height: 90px;
+	}
+
+	#both {
+		position: relative;
+		margin: 20px;
+	}
+
+	#left {
+		float: left;
+		width: 35%;
+	}
+
+	#right {
+		float: left;
+		width: 65%;
+	}
+	#hm{
+		height: 180px;
+		width: 270px;
+	}
 </style>
+
 <body>
-<header id ="header_name">     
-	
-    <h1 >Fotmob</h1>
-    <section id ="option">
-        
-        <div class="left"><a href="{% url 'index' %}">Home</a></div>
-    	<div class="left"><a href="{% url 'scores' %}">Scores</a></div>
-        <div class="left"><a href="{% url 'table' %}">Table</a></div>
-        
-    </section>
-            
-          
-         
-</header>
+	<header id="header_name">
+
+		<h1>Fotmob</h1>
+		<section id="option">
+
+			<div class="left"><a href="{% url 'index' %}">Home</a></div>
+			<div class="left"><a href="{% url 'scores' %}">Statistics</a></div>
+			<div class="left"><a href="{% url 'table' %}">Table</a></div>
+
+		</section>
 
 
-<h2 style="margin-left: 40%;; align-content: center;">PLAYER INFO</h2>
-	{% for p in player_details %}
-	<div><b>NAME:</b>  <span>{{p.Name}}</span></div>
-	<div><b>Player Position : </b>  <span>{{p.Position}}</span></div>
-	<div><b>Country:</b>  <span>{{p.Country}}</span></div>
-	<div><b>Minutes played:</b>  <span>{{p.Minutes_played}}</span></div>
-	<div><b>Red card:</b>  <span>{{p.Red_card}}</span></div>
-	<div><b>Yellow card:</b>  <span>{{p.Yellow_card}}</span></div>
 
-	{% endfor %}
-	<hr>
-	{% for p in goals %}
-	<div><b>Goals:</b>  <span>{{p.g}}</span></div>
-	{% endfor %}
-	{% for p in assist %}
-	<div><b>Assist:</b>  <span>{{p.a}}</span></div>
-	{% endfor %}
+	</header>
+
+	{%load static%}
+	<h2 style="margin-left: 40%; align-content: center;">PLAYER INFO</h2>
+
+	<div id="both">
+		<div id="left">
+			{% for p in player_details %}
+
+			<img src="{% static p.pl_path %}">
+			<div><b>NAME:</b> <span>{{p.Name}}</span></div>
+			<div><b>Player Position : </b> <span>{{p.Position}}</span></div>
+			<div><b>Country:</b> <span>{{p.Country}}</span></div>
+			<div><b>Minutes played:</b> <span>{{p.Minutes_played}}</span></div>
+			<div><b>Red card:</b> <span>{{p.Red_card}}</span></div>
+			<div><b>Yellow card:</b> <span>{{p.Yellow_card}}</span></div>
+
+			{% endfor %}
+			<hr>
+			{% for p in goals %}
+			<div><b>Goals:</b> <span>{{p.g}}</span></div>
+			{% endfor %}
+			{% for p in assist %}
+			<div><b>Assist:</b> <span>{{p.a}}</span></div>
+			{% endfor %}
+		</div>
+		<h2 style="margin-left: 40%; align-content: center;">Season HeatMap</h2>
+		<div id="right"><img id ="hm" src="{% static 'images/heatmap/image.png' %}"></div>
+	</div>
 </body>
+
 </html>

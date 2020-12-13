@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.db import connection
-
+from .heatmap_ import heat_map
+import random
 # Create your views here.
 def  SquadInfo(request,Team_id):
         cursor = connection.cursor()
@@ -18,7 +19,7 @@ def  SquadInfo(request,Team_id):
             dict1.append(row);
     
         cursor = connection.cursor()
-        sql = "SELECT COACH_ID,COACH_NAME FROM COACH WHERE COACH_id = %s" 
+        sql = "SELECT COACH_ID,COACH_NAME FROM COACH WHERE TEAM_id = %s" 
         cursor.execute(sql,[ Team_id])
         result1 = cursor.fetchall()
         cursor.close()
@@ -49,7 +50,7 @@ def  SquadInfo(request,Team_id):
                 for r in result1:
                     pl.append({'name':r[0],'id':r[1]})
                 pos.append({
-                'pos':p[0],
+                'pos':p[0].capitalize(),
                 'pl':pl
                 })
         
@@ -74,12 +75,27 @@ def  CoachView(request,coach_id):
         return render(request,'coach_info.html',{'coach_details' :dict1});
 def  PlayerView(request,player_id):
         cursor = connection.cursor()
-        sql = "SELECT PLAYER_ID,FIRST_NAME,LAST_NAME,Position,Minutes_played,NVL((SELECT SUM(RC_NO) FROM REDCARD WHERE PL_ID = PLAYER_ID GROUP BY PL_ID ),0),NVL((SELECT SUM(YC_NO) FROM YELLOWCARD WHERE PL_ID = PLAYER_ID GROUP BY PL_ID ),0),COUNTRY,TEAM_ID FROM PLAYER WHERE PLAYER_id = %s"
+        sql = "SELECT PLAYER_PIC,FIRST_NAME,LAST_NAME,Position,Minutes_played,NVL((SELECT SUM(RC_NO) FROM REDCARD WHERE PL_ID = PLAYER_ID GROUP BY PL_ID ),0),NVL((SELECT SUM(YC_NO) FROM YELLOWCARD WHERE PL_ID = PLAYER_ID GROUP BY PL_ID ),0),COUNTRY,TEAM_ID FROM PLAYER WHERE PLAYER_id = %s"
         cursor.execute(sql,[ player_id])
         result1 = cursor.fetchall()
         cursor.close()
         
-       
+        cursor = connection.cursor()
+        sql = "SELECT X_COORD,Y_COORD FROM HEATMAP WHERE PLAYER_id = %s"
+        cursor.execute(sql,[ player_id])
+        res_hm = cursor.fetchall()
+        cursor.close()
+        
+        x_coord = []
+        y_coord = []
+        
+        for h in res_hm:
+            x_coord.append(h[0])
+            y_coord.append(h[1])
+           
+        heat_map(x_coord,y_coord)
+        
+        path = "----"
 
         dict1 = [] 
         for r2 in result1:
@@ -89,6 +105,9 @@ def  PlayerView(request,player_id):
                 Red_Card = r2[5]
                 Yellow_card = r2[6]
                 Country = r2[7]
+                pl_path = r2[0]
+                path = pl_path
+                print(pl_path)
                 row ={
                 'player_id':player_id,
                 'Name':Name,
@@ -97,8 +116,11 @@ def  PlayerView(request,player_id):
                 'Red_card':Red_Card,
                 'Yellow_card':Yellow_card,
                 'Country':Country,
+                'pl_path':pl_path
                 }
                 dict1.append(row);
+        print('path is ');
+        print(pl_path);
         dict2=[]
         cursor = connection.cursor()
         sql = "SELECT SUM(GOALS) FROM SCORES  WHERE SCORING_ID = %s GROUP BY SCORING_ID"

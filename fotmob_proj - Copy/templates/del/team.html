@@ -75,8 +75,8 @@
            <td>{{player_each.team_name}}</td>
            <td>{{player_each.s_name}}</td>
 			<td>
-			<a href="{%url 'util_d' cont.list.name player_each.team_id%}">Delete</a>
-				
+			
+			<a href="{%url 't_up'  player_each.team_id%}">Update</a>
 			</td>
        </tr>
     {% endfor %}

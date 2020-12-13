@@ -6,7 +6,7 @@ from django.db import connection
 # Create your views here.
 def  Res():
         cursor = connection.cursor()
-        sql = "SELECT  GETRESULT(MATCH_ID) ,MATCH_ID FROM MATCH WHERE GETRESULT(MATCH_ID) <> 'NULL' ORDER BY DATE_ DESC;"
+        sql = "SELECT  GETRESULT(MATCH_ID) ,MATCH_ID FROM MATCH WHERE GETRESULT(MATCH_ID) <> 'NULL' AND (SYSDATE > DATE_+(1/1440*90)) ORDER BY DATE_ DESC;"
         cursor.execute(sql)
         result2 = cursor.fetchall()
         cursor.close()
@@ -85,7 +85,7 @@ def  LoginView(request):
         return render(request, 'loginPage.html');
 def  TablePoint(request):
         cursor = connection.cursor()
-        sql = "SELECT T.TEAM_ID,T.TEAM_NAME ,T.SHORT_NAME,Win(S.TEAM_ID) AS W,Draw(S.TEAM_ID) AS D,Lose(S.TEAM_ID) AS L,T.FLAG FROM TEAM T  LEFT JOIN SCORES S ON (S.TEAM_ID = T.TEAM_ID) GROUP BY S.TEAM_ID,T.TEAM_NAME,T.SHORT_NAME,T.FLAG,T.TEAM_ID ORDER BY W+D+L DESC"
+        sql = "SELECT T.TEAM_ID,T.TEAM_NAME ,T.SHORT_NAME,Win(S.TEAM_ID) AS W,Draw(S.TEAM_ID) AS D,Lose(S.TEAM_ID) AS L,T.FLAG FROM TEAM T  LEFT JOIN SCORES S ON (S.TEAM_ID = T.TEAM_ID) GROUP BY S.TEAM_ID,T.TEAM_NAME,T.SHORT_NAME,T.FLAG,T.TEAM_ID ORDER BY 3*W+D DESC"
         cursor.execute(sql)
         result = cursor.fetchall()
         cursor.close()
@@ -112,7 +112,7 @@ def  TeamInfo(request ,Team_id):
         cursor.close()
         
         cursor = connection.cursor()
-        sql = "SELECT GetGoal3(%s,MATCH_ID),MATCH_ID FROM MATCH WHERE HOME_ID =%s or AWAY_ID =%s ORDER BY DATE_ DESC;"
+        sql = "SELECT GetGoal3(%s,MATCH_ID),MATCH_ID FROM MATCH WHERE (HOME_ID =%s or AWAY_ID =%s ) AND (SYSDATE > DATE_+(1/1440*90)) ORDER BY DATE_ DESC;"
         cursor.execute(sql,[Team_id,Team_id,Team_id])
         result2 = cursor.fetchall()
         cursor.close()
@@ -138,8 +138,11 @@ def  TeamInfo(request ,Team_id):
                 a_name =score_list[5]
                 a_id =score_list[6]
                 wl = score_list[7]
+                h_path =score_list[8]
+                a_path =score_list[9]
+                
                 m_id = r[1]
-            row  = {'t1_id':h_id,'t2_id':a_id,'m_id':m_id,'m_date':match_date,'h_name':h_name,'h_goals':h_goals,'a_name':a_name,'a_goals':a_goals,'wl':wl}
+            row  = {'t1_id':h_id,'t2_id':a_id,'m_id':m_id,'m_date':match_date,'h_name':h_name,'h_goals':h_goals,'a_name':a_name,'a_goals':a_goals,'wl':wl,'h_path':h_path,'a_path':a_path}
             dict2.append(row);
         
         
@@ -179,6 +182,42 @@ def  Match_Dt_View(request,Team_1_id,Team_2_id,Matchid):
         t1_yel_list=[]
         t2_yel_list=[]
         
+        cursor = connection.cursor()
+        sql = "SELECT GOALS,(SELECT FIRST_NAME||' '||LAST_NAME FROM PLAYER WHERE PLAYER_ID = SCORING_ID) ,NVL((SELECT FIRST_NAME||' '||LAST_NAME FROM PLAYER WHERE PLAYER_ID = ASSIST_ID),'NONE') FROM SCORES WHERE TEAM_ID = %s AND MATCH_ID = %s;"
+        cursor.execute(sql,[Team_1_id,Matchid])
+        t1_score = cursor.fetchall()
+        cursor.close()
+        cursor = connection.cursor()
+        sql = "SELECT GOALS,(SELECT FIRST_NAME||' '||LAST_NAME FROM PLAYER WHERE PLAYER_ID = SCORING_ID) ,NVL((SELECT FIRST_NAME||' '||LAST_NAME FROM PLAYER WHERE PLAYER_ID = ASSIST_ID),'NONE') FROM SCORES WHERE TEAM_ID = %s AND MATCH_ID = %s;"
+        cursor.execute(sql,[Team_2_id,Matchid])
+        t2_score = cursor.fetchall()
+        cursor.close()
+        
+        t1_sc = []
+        t2_sc = []
+        for t in t1_score:
+            goals = t[0]
+            scorer = t[1]
+            assist = t[2]
+            t1_sc.append({'goals':goals,'scorer':scorer,'assist':assist})
+        for t in t2_score:
+            goals = t[0]
+            scorer = t[1]
+            assist = t[2]
+            t2_sc.append({'goals':goals,'scorer':scorer,'assist':assist})
+        h_path =''
+        a_path = ''
+        
+        cursor = connection.cursor()
+        sql = "SELECT GETFLAGPATH(%s),GETFLAGPATH(%s) FROM TEAM ;"
+        cursor.execute(sql,[Team_1_id,Team_2_id])
+        t_flag = cursor.fetchone()
+        cursor.close()
+        
+        h_path =t_flag[0]    
+        a_path =t_flag[1]    
+        print(h_path);
+        print(a_path);
         for r in r_t1:
             Name = r[1]
             card_no = r[0]
@@ -218,11 +257,11 @@ def  Match_Dt_View(request,Team_1_id,Team_2_id,Matchid):
                 a_name =score_list[5]
                 a_id =score_list[6]
                 ref_name= r[1]
-                row  = {'t1_id':h_id,'t2_id':a_id,'date':date,'time':time,'h_name':h_name,'h_goals':h_goals,'a_name':a_name,'a_goals':a_goals,'ref_name':ref_name}
+                row  = {'t1_id':h_id,'t2_id':a_id,'date':date,'time':time,'h_name':h_name,'h_goals':h_goals,'a_name':a_name,'a_goals':a_goals,'ref_name':ref_name,'h_path':h_path,'a_path':a_path}
                 dict2.append(row);
         whole_content={'result':dict2}
         
-        return render(request,'Match_details.html',{'content' :dict2,'t1_r':t1_red_list,'t2_r':t2_red_list,'t1_y':t1_yel_list,'t2_y':t2_yel_list});
+        return render(request,'Match_details.html',{'content' :dict2,'t1_r':t1_red_list,'t2_r':t2_red_list,'t1_y':t1_yel_list,'t2_y':t2_yel_list,'t1_sc':t1_sc,'t2_sc':t2_sc});
 def  CompareUtilView(request):
         
         return render(request,'compare.html');
@@ -255,7 +294,7 @@ def  CompareView(request):
             
             
             cursor = connection.cursor()
-            sql = "SELECT FIRST_NAME||' '||LAST_NAME,Position,Minutes_played,NVL((SELECT SUM(RC_NO) FROM REDCARD WHERE PL_ID = PLAYER_ID GROUP BY PL_ID ),0),NVL((SELECT SUM(YC_NO) FROM YELLOWCARD WHERE PL_ID = PLAYER_ID GROUP BY PL_ID ),0),COUNTRY FROM PLAYER WHERE PLAYER_id = %s"
+            sql = "SELECT P.PLAYER_PIC,P.FIRST_NAME||' '||P.LAST_NAME,P.Position,P.Minutes_played,NVL((SELECT SUM(RC_NO) FROM REDCARD WHERE PL_ID = P.PLAYER_ID GROUP BY PL_ID ),0),NVL((SELECT SUM(YC_NO) FROM YELLOWCARD WHERE PL_ID = P.PLAYER_ID GROUP BY PL_ID ),0),P.COUNTRY,(SELECT TEAM_NAME FROM TEAM T WHERE T.TEAM_ID = P.TEAM_ID ) FROM PLAYER P WHERE P.PLAYER_id = %s"
             cursor.execute(sql,[ player1_id])
             result1 = cursor.fetchall()
             cursor.close()
@@ -264,19 +303,23 @@ def  CompareView(request):
 
             dict1 = [] 
             for r2 in result1:
-                    Name = r2[0]
-                    Position = r2[1]
-                    Minutes_played = r2[2]
-                    Red_Card = r2[3]
-                    Yellow_card = r2[4]
-                    Country = r2[5]
+                    pl_path = r2[0]
+                    Name = r2[1]
+                    Position = r2[2]
+                    Minutes_played = r2[3]
+                    Red_Card = r2[4]
+                    Yellow_card = r2[5]
+                    Country = r2[6]
+                    team_name = r2[7]
                     row ={
+                    'pl_path':pl_path,
                     'Name':Name,
                     'Position':Position,
                     'Minutes_played':Minutes_played,
                     'Red_card':Red_Card,
                     'Yellow_card':Yellow_card,
                     'Country':Country,
+                    'team_name':team_name
                     }
                     dict1.append(row);
             dict2=[]
@@ -303,7 +346,7 @@ def  CompareView(request):
             player1 ={'player_details' :dict1,'goals':goal,'assist':asst}
             
             cursor = connection.cursor()
-            sql = "SELECT FIRST_NAME||' '||LAST_NAME,Position,Minutes_played,NVL((SELECT SUM(RC_NO) FROM REDCARD WHERE PL_ID = PLAYER_ID GROUP BY PL_ID ),0),NVL((SELECT SUM(YC_NO) FROM YELLOWCARD WHERE PL_ID = PLAYER_ID GROUP BY PL_ID ),0),COUNTRY FROM PLAYER WHERE PLAYER_id = %s"
+            sql = "SELECT P.PLAYER_PIC,P.FIRST_NAME||' '||P.LAST_NAME,P.Position,P.Minutes_played,NVL((SELECT SUM(RC_NO) FROM REDCARD WHERE PL_ID = P.PLAYER_ID GROUP BY PL_ID ),0),NVL((SELECT SUM(YC_NO) FROM YELLOWCARD WHERE PL_ID = P.PLAYER_ID GROUP BY PL_ID ),0),P.COUNTRY,(SELECT TEAM_NAME FROM TEAM T WHERE T.TEAM_ID = P.TEAM_ID ) FROM PLAYER P WHERE P.PLAYER_id = %s"
             cursor.execute(sql,[ player2_id])
             result1 = cursor.fetchall()
             cursor.close()
@@ -312,19 +355,24 @@ def  CompareView(request):
 
             dict1 = [] 
             for r2 in result1:
-                    Name = r2[0]
-                    Position = r2[1]
-                    Munutes_played = r2[2]
-                    Red_Card = r2[3]
-                    Yellow_card = r2[4]
-                    Country = r2[5]
+                    pl_path = r2[0]
+                    Name = r2[1]
+                    Position = r2[2]
+                    Minutes_played = r2[3]
+                    Red_Card = r2[4]
+                    Yellow_card = r2[5]
+                    Country = r2[6]
+                    team_name = r2[7]
                     row ={
+                    'pl_path':pl_path,
                     'Name':Name,
                     'Position':Position,
-                    'Minutes_played':Munutes_played,
+                    'Minutes_played':Minutes_played,
                     'Red_card':Red_Card,
                     'Yellow_card':Yellow_card,
                     'Country':Country,
+                    'team_name':team_name
+                    
                     }
                     dict1.append(row);
             dict2=[]

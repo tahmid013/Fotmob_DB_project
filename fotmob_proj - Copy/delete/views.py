@@ -8,7 +8,7 @@ def  DeleteView  (request):
         return render(request,  'delete.html');
 def  PlayerDelView(request):
         cursor = connection.cursor()
-        sql = "SELECT * FROM PLAYER ;"
+        sql = "SELECT P.PLAYER_ID,P.FIRST_NAME,P.LAST_NAME,P.POSITION,P.MINUTES_PLAYED,P.COUNTRY,(SELECT TEAM_NAME FROM TEAM T WHERE T.TEAM_ID = P.TEAM_ID ) FROM PLAYER P ;"
         cursor.execute(sql)
         result2 = cursor.fetchall()
         cursor.close()
@@ -18,21 +18,18 @@ def  PlayerDelView(request):
                 First_name = r2[1]
                 Last_name = r2[2]
                 Position = r2[3]
-                Munutes_played = r2[4]
-                Red_Card = r2[5]
-                Yellow_card = r2[6]
-                Country = r2[7]
-                team_id = r2[8]
+                Minutes_played = r2[4]
+                Country = r2[5]
+                team_name = r2[6]
                 row ={
                 'player_id':player_id,
                 'First_name':First_name,
                 'Last_name':Last_name,
                 'Position':Position,
-                'Minutes_played':Munutes_played,
-                'Red_card':Red_Card,
-                'Yellow_card':Yellow_card,
+                'Minutes_played':Minutes_played,
+                
                 'Country':Country,
-                'Team_id':team_id
+                'Team_name':team_name
                 }
                 
                 dict.append(row)
@@ -148,15 +145,19 @@ def  CoachDelView(request):
 
 def  UtilDelView  (request,x,y):
         if(x=='PLAYER'):
+            
             cursor = connection.cursor()
-            sql = "DELETE  FROM PLAYER WHERE PLAYER_ID = %s;"
-            cursor.execute(sql,[y])
+            
+            cursor.execute("call Pl_del_prc(%s)",[y])
             connection.commit()
             cursor.close()
             return render(request,  'del/success.html',);
         if(x=='MATCH'):
             cursor = connection.cursor()
             sql = "DELETE  FROM MATCH WHERE MATCH_ID = %s;"
+            """
+            sql = "DELETE FROM REDCARD WHERE MATCH_ID = %s;DELETE FROM YELLOWCARD WHERE MATCH_ID = %s;DELETE FROM SCORES WHERE MATCH_ID= %s;DELETE FROM MATCH WHERE MATCH_ID= %s;"
+            """
             cursor.execute(sql,[y])
             connection.commit()
             cursor.close()
@@ -164,6 +165,10 @@ def  UtilDelView  (request,x,y):
         if(x=='TEAM'):
             cursor = connection.cursor()
             sql = "DELETE  FROM TEAM WHERE TEAM_ID = %s;"
+            """
+            sql ="DELETE REDCARD WHERE T_ID = %s;DELETE YELLOWCARD WHERE T_ID = %s;DELETE SCORES WHERE TEAM_ID = %s;DELETE MATCH WHERE (HOME_ID = %s or AWAY_ID =%s);DELETE PLAYER WHERE TEAM_ID = %s;DELETE COACH WHERE TEAM_ID = %s;DELETE TEAM WHERE TEAM_ID = %s;"
+            """
+
             cursor.execute(sql,[y])
             connection.commit()
             cursor.close()

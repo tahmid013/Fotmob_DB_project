@@ -13,10 +13,19 @@ def  PlayerInsView(request):
             last_name = request.POST['l_name']
             position = request.POST['position']
             min_played = request.POST['min_played']
-            r_card = request.POST['r_card']
-            y_card = request.POST['y_card']
+          
             country = request.POST['Country']
             team_sn = request.POST['team']
+            
+            pl_path ='images/player/'
+            
+            pic = str(request.FILES.get('image_pl',False))
+            if(pic == 'False'):
+                pic = 'default.png'
+            pl_path+=pic
+            
+            print(pic)
+            print(pl_path)
             
             cursor = connection.cursor()
             sql = 'SELECT SHORT_NAME ,TEAM_ID FROM TEAM;'
@@ -38,7 +47,7 @@ def  PlayerInsView(request):
             player_data = cursor.fetchall()
             cursor.close()
             
-            if(first_name == "" or last_name == "" or position == "" or min_played == "" or r_card == "" or y_card == "" or country == "" ):
+            if(first_name == "" or last_name == "" or position == "" or min_played == ""  or country == "" ):
                     flag = True
             
             for r  in player_data:
@@ -47,11 +56,15 @@ def  PlayerInsView(request):
                     break
             
             if(flag == False):
+                
+                
                 cursor = connection.cursor()
-                sql = 'INSERT INTO PLAYER(First_name,Last_name,Position,Minutes_played,Red_card,Yellow_card,Country,Team_id) VALUES(%s,%s,%s,%s,%s,%s,%s,%s);'
-                cursor.execute(sql,[first_name,last_name,position,min_played,r_card,y_card,country,team_id])
+                sql = 'INSERT INTO PLAYER(First_name,Last_name,Position,Minutes_played,Country,Team_id,PLAYER_PIC) VALUES(%s,%s,%s,%s,%s,%s,%s);'
+                cursor.execute(sql,[first_name,last_name,position,min_played,country,team_id,pl_path])
                 connection.commit()
                 cursor.close()
+               
+                
             name = 'player'
             if(flag == True):
                 return render(request, 'ins/failed.html',{'type':name});
@@ -93,7 +106,7 @@ def  MatchInsView(request):
                 st_id = r[0]
                 
             cursor = connection.cursor()
-            sql = 'SELECT  M.HOME_ID FROM MATCH M JOIN TEAM T ON(M.HOME_ID = T.TEAM_ID) WHERE T.SHORT_NAME = %s;'
+            sql = 'SELECT TEAM_ID FROM TEAM  WHERE SHORT_NAME = %s;'
             cursor.execute(sql,[home_t])
             result = cursor.fetchall()
             cursor.close()
@@ -102,7 +115,7 @@ def  MatchInsView(request):
                 h_id = r[0]
             
             cursor = connection.cursor()
-            sql = 'SELECT  M.AWAY_ID FROM MATCH M JOIN TEAM T ON(M.AWAY_ID = T.TEAM_ID) WHERE T.SHORT_NAME = %s;'
+            sql = 'SELECT TEAM_ID FROM TEAM  WHERE SHORT_NAME = %s;'
             cursor.execute(sql,[away_t])
             result = cursor.fetchall()
             cursor.close()
@@ -295,7 +308,7 @@ def  CoachInsView(request):
                 t_id = r[0]
             if(flag == False):
                 cursor = connection.cursor()
-                sql = 'INSERT INTO COACH(COACH_NAME,LEAGUE_WON,TEAM_ID) VALUES(%s,%s,%s);'
+                sql = 'INSERT INTO COACH(COACH_NAME,LEAGUES_WON,TEAM_ID) VALUES(%s,%s,%s);'
                 cursor.execute(sql,[coach_name,league_won,t_id])
                 connection.commit()
                 cursor.close()
@@ -382,4 +395,131 @@ def  StadiumInsView(request):
                 return render(request, 'ins/success.html',{'type':name});
         else:
             return render(request, 'ins/stadium.html');
-        
+def  RedCardInsView(request):
+        if(request.method == 'POST'):
+            rc_no = request.POST['rc_no']
+            pl_name = request.POST['pl_name']
+            team_name = request.POST['team_name']
+            match_date = request.POST['match_date']
+            stadium_name = request.POST['stadium_name']
+            
+            pl_id=-1
+            
+            t_id=-1
+            m_id = -1
+            
+            cursor = connection.cursor()
+            sql = "SELECT  PLAYER_ID FROM PLAYER WHERE (First_name||' '||Last_name = %s);"
+            cursor.execute(sql,[pl_name])
+            result = cursor.fetchall()
+            cursor.close()
+   
+            for r in result:
+                pl_id = r[0]
+            
+            
+            
+            cursor = connection.cursor()
+            sql = 'SELECT  TEAM_ID FROM TEAM WHERE (SHORT_NAME = %s);'
+            cursor.execute(sql,[team_name])
+            result = cursor.fetchall()
+            cursor.close()
+   
+            for r in result:
+                t_id = r[0]            
+            
+            cursor = connection.cursor()
+            date_format = 'yyyy-mm-dd hh24:mi:ss'
+            sql = 'SELECT  MATCH_ID FROM MATCH M JOIN STADIUM S ON (M.STADIUM_ID = S.STADIUM_ID) WHERE (M.DATE_ = TO_DATE(%s,%s) and S.STADIUM_NAME = %s);'
+            cursor.execute(sql,[match_date,date_format,stadium_name])
+            result = cursor.fetchall()
+            cursor.close()
+   
+            for r in result:
+                m_id = r[0]
+            
+            flag = False;
+            
+           
+            if( pl_id==-1 or  t_id==-1 or m_id==-1):
+                    flag = True
+            
+            
+            if(flag == False):
+                
+                cursor = connection.cursor()
+                sql = 'INSERT INTO REDCARD(RC_NO,PL_ID,TEAM_ID,MATCH_ID) VALUES(%s,%s,%s,%s,%s);'
+                cursor.execute(sql,[rc_no,pl_id,t_id,m_id])
+                connection.commit()
+                cursor.close()
+            name = 'red_ins'
+            if(flag == True):
+                return render(request, 'ins/failed.html',{'type':name});
+            if(flag == False):
+                return render(request, 'ins/success.html',{'type':name});
+        else:
+            return render(request, 'ins/red.html');
+def  YellowCardInsView(request):
+        if(request.method == 'POST'):
+            rc_no = request.POST['yc_no']
+            pl_name = request.POST['pl_name']
+            team_name = request.POST['team_name']
+            match_date = request.POST['match_date']
+            stadium_name = request.POST['stadium_name']
+            
+            pl_id=-1
+            
+            t_id=-1
+            m_id = -1
+            
+            cursor = connection.cursor()
+            sql = "SELECT  PLAYER_ID FROM PLAYER WHERE (First_name||' '||Last_name = %s);"
+            cursor.execute(sql,[pl_name])
+            result = cursor.fetchall()
+            cursor.close()
+   
+            for r in result:
+                pl_id = r[0]
+            
+            
+            
+            cursor = connection.cursor()
+            sql = 'SELECT  TEAM_ID FROM TEAM WHERE (SHORT_NAME = %s);'
+            cursor.execute(sql,[team_name])
+            result = cursor.fetchall()
+            cursor.close()
+   
+            for r in result:
+                t_id = r[0]            
+            
+            cursor = connection.cursor()
+            date_format = 'yyyy-mm-dd hh24:mi:ss'
+            sql = 'SELECT  MATCH_ID FROM MATCH M JOIN STADIUM S ON (M.STADIUM_ID = S.STADIUM_ID) WHERE (M.DATE_ = TO_DATE(%s,%s) and S.STADIUM_NAME = %s);'
+            cursor.execute(sql,[match_date,date_format,stadium_name])
+            result = cursor.fetchall()
+            cursor.close()
+   
+            for r in result:
+                m_id = r[0]
+            
+            flag = False;
+            
+           
+            if( pl_id==-1 or  t_id==-1 or m_id==-1):
+                    flag = True
+            
+            
+            if(flag == False):
+                
+                cursor = connection.cursor()
+                sql = 'INSERT INTO YELLOWCARD(YC_NO,PL_ID,TEAM_ID,MATCH_ID) VALUES(%s,%s,%s,%s,%s);'
+                cursor.execute(sql,[yc_no,pl_id,t_id,m_id])
+                connection.commit()
+                cursor.close()
+            name = 'y_ins'
+            if(flag == True):
+                return render(request, 'ins/failed.html',{'type':name});
+            if(flag == False):
+                return render(request, 'ins/success.html',{'type':name});
+        else:
+            return render(request, 'ins/yellow.html');

@@ -28,9 +28,10 @@
 		position: absolute;
 		margin: 10px;
 	}
-	#option .left{
+	.left{
 		float: left;
 		margin-top:10px;
+		margin-left: 10px;
 		margin-right:50px;  
 		border: 2px solid blue;
 		background-color: white;
@@ -58,8 +59,8 @@
 </header>
 
 
-<h2 style="margin-left: 40%;; align-content: center;">Successfully Updated {{type}}</h2>
+<h2 style="margin-left: 40%;; align-content: center;">Successfully Updated </h2>
 
-<div><a href="{% url type %}">go back</a></div>
+<div class ="left"><a href="{% url type %}">go back</a></div>
 </body>
 </html>

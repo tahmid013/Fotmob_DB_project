@@ -11,10 +11,16 @@ def PlView (request,pl_id):
             last_name = request.POST['l_name']
             position = request.POST['position']
             min_played = request.POST['min_played']
-            r_card = request.POST['r_card']
-            y_card = request.POST['y_card']
+            
             country = request.POST['Country']
             team_sn = request.POST['team']
+            
+            pl_path ='images/player/'
+            
+            pic = str(request.FILES.get('pl_pic',False))
+            if(pic == 'False'):
+                pic = 'default.png'
+            pl_path+=pic
             
             cursor = connection.cursor()
             sql = 'SELECT SHORT_NAME ,TEAM_ID FROM TEAM;'
@@ -32,15 +38,15 @@ def PlView (request,pl_id):
             
             
             
-            if(first_name == "" or last_name == "" or position == "" or min_played == "" or r_card == "" or y_card == "" or country == "" ):
+            if(first_name == "" or last_name == "" or position == "" or min_played == "" or country == "" ):
                     flag = True
             
             
             
             if(flag == False):
                 cursor = connection.cursor()
-                sql = 'UPDATE PLAYER SET First_name =%s,Last_name=%s,Position=%s,Minutes_played=%s,Red_card=%s,Yellow_card=%s,Country=%s,Team_id=%s WHERE PLAYER_ID = %s;'
-                cursor.execute(sql,[first_name,last_name,position,min_played,r_card,y_card,country,team_id,pl_id])
+                sql = 'UPDATE PLAYER SET First_name =%s,Last_name=%s,Position=%s,Minutes_played=%s,Country=%s,Team_id=%s ,PLAYER_PIC = %s WHERE PLAYER_ID = %s;'
+                cursor.execute(sql,[first_name,last_name,position,min_played,country,team_id,pl_path,pl_id])
                 connection.commit()
                 cursor.close()
             name = 'player_d'
@@ -58,9 +64,8 @@ def PlView (request,pl_id):
             First_name = ""
             Last_name = ""
             Position = ""
-            Munutes_played = ""
-            Red_Card = ""
-            Yellow_card = ""
+            Minutes_played = ""
+            
             Country = ""
             team_id = ""
             
@@ -69,11 +74,9 @@ def PlView (request,pl_id):
                     First_name = r2[1]
                     Last_name = r2[2]
                     Position = r2[3]
-                    Munutes_played = r2[4]
-                    Red_Card = r2[5]
-                    Yellow_card = r2[6]
-                    Country = r2[7]
-                    team_id = r2[8]
+                    Minutes_played = r2[4]
+                    Country = r2[5]
+                    team_id = r2[6]
             d = []
             cursor = connection.cursor()
             sql = "SELECT SHORT_NAME FROM TEAM WHERE TEAM_ID = %s ;"
@@ -88,9 +91,8 @@ def PlView (request,pl_id):
             'First_name':First_name,
             'Last_name':Last_name,
             'Position':Position,
-            'Minutes_played':Munutes_played,
-            'Red_card':Red_Card,
-            'Yellow_card':Yellow_card,
+            'Minutes_played':Minutes_played,
+            
             'Country':Country,
             'Team_name':t_name
             }
@@ -206,7 +208,7 @@ def MtView(request,m_id):
             return render(request,  'upd/match.html',{'row': row});
       
 def SView(request,s_id):
-        return render(request,  'upd/player.html');
+        return render(request,  'upd/score.html');
 def RView(request,r_id):
         return render(request,  'upd/referee.html');
 def CView(request,c_id):
@@ -267,4 +269,67 @@ def CView(request,c_id):
             }
             return render(request,  'upd/coach.html',{'row': row});
 def TView(request,t_id):
-        return render(request,  'upd/player.html');
+        if(request.method == 'POST'):
+            
+            short_name = request.POST['s_name']
+            team_name = request.POST['t_name']
+            
+            
+            fl_path ='images/flag/'
+            
+            pic = str(request.FILES.get('fl_path',False))
+            if(pic == 'False'):
+                pic = 'default.png'
+            fl_path+=pic
+            
+            flag = False;
+            tn_id = -1
+            cursor = connection.cursor()
+            sql = 'SELECT TEAM_ID FROM TEAM WHERE SHORT_NAME = %s;'
+            cursor.execute(sql,[short_name])
+            team_data = cursor.fetchall()
+            cursor.close()
+            
+            
+            
+            if(team_name == "" or short_name == ""):
+                    flag = True
+            
+            
+            for r in team_data:
+                tn_id = r[0]
+            if(flag == False):
+                cursor = connection.cursor()
+                sql = 'UPDATE TEAM SET TEAM_NAME =%s,SHORT_NAME=%s,FLAG=%s WHERE TEAM_ID = %s;'
+                cursor.execute(sql,[team_name,short_name,fl_path,tn_id])
+                connection.commit()
+                cursor.close()
+            name = 'team_d'
+            if(flag == True):
+                return render(request, 'upd/failed.html',{'type':name});
+            if(flag == False):
+                return render(request, 'upd/success.html',{'type':name});
+        else:
+            cursor = connection.cursor()
+            sql = "SELECT TEAM_NAME,SHORT_NAME,FLAG FROM TEAM WHERE TEAM_ID = %s ;"
+            cursor.execute(sql,[t_id])
+            result2 = cursor.fetchall()
+            cursor.close()
+            short_name = ""
+            path = ""
+            team_name = ""
+            
+            
+            for r2 in result2:
+                    
+                    short_name = r2[1]
+                    path = r2[2]
+                    team_name = r2[0]
+            
+            row ={
+            'short_name':short_name,
+            'path':path,
+            'team_name':team_name,
+            
+            }
+            return render(request,  'upd/team.html',{'row': row});

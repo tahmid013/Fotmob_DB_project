@@ -65,7 +65,7 @@
 
 
 <h2 style="margin-left: 40%;; align-content: center;">Fill form Player</h2>
-<form method="POST" autocomplete="off">
+<form method="POST" autocomplete="off"  enctype="multipart/form-data">
 	{% csrf_token %}
 	<h1 class ="cont">Updating player</h1>
 
@@ -88,14 +88,7 @@
 		<label for="min_played">Minutes Played</label>
 		<input type="text" name="min_played" id="min_played" value="{{row.Minutes_played}}">
 	  </p>
-	  <p>
-		<label for="r_card">Red Card</label>
-		<input type="text" name="r_card" id="r_card" value="{{row.Red_card}}">
-	  </p>
-	  <p>
-		<label for="y_card">Yellow Card</label>
-		<input type="text" name="y_card" id="y_card" value="{{row.Yellow_card}}">
-	  </p>
+	  
 	  <p>
 		<label for="Country">Country</label>
 		<input type="text" name="Country" id="Country" value="{{row.Country}}">
@@ -103,6 +96,10 @@
 	  <p>
 		<label for="team">Team short name</label>
 		<input type="text" name="team" id="team" value="{{row.Team_name}}">
+	  </p>
+	  <p>
+		<label >Image </label>
+		  <input type="file" name ="pl_pic">
 	  </p>
 	  <input type="submit" name="go" id="go" value="update" class ="button">
 

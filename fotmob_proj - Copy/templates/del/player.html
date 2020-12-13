@@ -37,8 +37,8 @@
 		color: white;
 
 	}
-	#table_1{
-		margin-top: 50px;
+	#table_1,table{
+		margin: 20px;
 	}
 </style>
 <body>
@@ -62,14 +62,12 @@
 
 <table width="100%"  border="1">
     <tr style="background-color:hsl(0, 0%, 83%)">
-        <th>First_Name</th>
-        <th>Last_Name</th>
+        <th>First Name</th>
+        <th>Last Name</th>
         <th>Position</th>
-        <th>Minutes_played</th>
-        <th>Red_card</th>
-        <th>Yellow_card</th>
+        <th>Minutes Played</th>
         <th>Country</th>
-        <th>Team_id</th>
+        <th>Team Name</th>
         <th>Edit</th>
     </tr>
     {% for player_each in cont.type %}
@@ -78,10 +76,8 @@
            <td>{{player_each.Last_name}}</td>
            <td>{{player_each.Position}}</td>
            <td>{{player_each.Minutes_played}}</td>
-           <td>{{player_each.Red_card}}</td>
-           <td>{{player_each.Yellow_card}}</td>
            <td>{{player_each.Country}}</td>
-           <td>{{player_each.Team_id}}</td>
+           <td>{{player_each.Team_name}}</td>
 			<td>
 			<a href="{%url 'util_d' cont.list.name player_each.player_id%}">Delete</a>
 			<a href="{%url 'pl_up' player_each.player_id%}">Update</a>	

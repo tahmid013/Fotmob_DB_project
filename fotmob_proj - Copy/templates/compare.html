@@ -1,137 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="templates/css/bootstrap.min.css">
-    <link rel="stylesheet" href="templates/css/styles.css">
-    <title>main_page...</title>
-    
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="templates/css/bootstrap.min.css">
+	<link rel="stylesheet" href="templates/css/styles.css">
+	<title>main_page...</title>
+
 </head>
 <style type="text/css">
 	body {
 		background-color: #e6d195;
 		padding: 0px;
-		margin:0px;
+		margin: 0px;
 	}
-	#header_name{
+
+	#header_name {
 		background-color: #12CC32;
 		padding-top: 20px;
 		padding-bottom: 5px;
 		padding-left: 30px;
 	}
-	#content{
+
+	#content {
 		margin-top: 70px;
 		margin-left: 20px;
 	}
-	#option{
+
+	#option {
 		margin: 10px;
 	}
-	#option .left{
+
+	#option .left {
 		float: left;
-		margin-top:10px;
-		margin-right:50px;  
+		margin-top: 10px;
+		margin-right: 50px;
 		border: 2px solid blue;
 		background-color: white;
 		color: white;
 
 	}
-	#table_1{
+
+	#table_1 {
 		margin-top: 50px;
 	}
-	table th,td{
+
+	table th,
+	td {
 		padding: 5px;
 	}
-	#both{
-		position: absolute;
-		width:100%;
-	}
-	#head{
-		float: left;
-		width:20%;
-	}
-	#left_pl,#right_pl{
-		float: left;
-		width:40%;
+
+	#both {
+		width: 100%;
+		
 	}
 
-</style>
-<body>
-	<header id ="header_name">     
+	#head {
+		float: left;
+		width: 20%;
+	}
+
+	#left_pl,
+	#right_pl {
+		float: left;
+		width: 40%;
 		
-		<h1 >Fotmob</h1>
-		<section id ="option">
+	}
+
+	img {
+		height: 80px;
+		width: 100px;
+	}
+</style>
+
+<body>
+	<header id="header_name">
+
+		<h1>Fotmob</h1>
+		<section id="option">
 			<div class="left"><a href="{% url 'index' %}">Home</a></div>
-			<div class="left"><a href="{% url 'scores' %}">Scores</a></div>
+			<div class="left"><a href="{% url 'scores' %}">Statistics</a></div>
 			<div class="left"><a href="{% url 'table' %}">Table</a></div>
 		</section>
-				
-			  
-			 
+
+
+
 	</header>
-	
-<section id ="content">
-	<form method="POST" autocomplete="off">
-        {% csrf_token %}
-        <h1>Input players</h1>
 
-        <div class="inset">
-          <span>
-            <label for="player1">Player 1</label>
-            <input type="text" name="player1" id="player1">
-          </span>
+	<section id="content">
+		<form method="POST" autocomplete="off">
+			{% csrf_token %}
+			<h1>Input players</h1>
 
-          <span>
-            <label for="player2">Player 2</label>
-            <input type="text" name="player2" id="player2">
-          </span>
+			<div class="inset">
+				<span>
+					<label for="player1">Player 1</label>
+					<input type="text" name="player1" id="player1">
+				</span>
 
-          <input type="submit" name="go" id="go" value="submitted" class ="button">
+				<span>
+					<label for="player2">Player 2</label>
+					<input type="text" name="player2" id="player2">
+				</span>
 
-          
-		
-	  </form>
-	  <hr>
-{%if safe%}
-		<div id ="both">
-		<div id ="head">
-			<div>Name</div>
-			<div>Position</div>
-			<div>Minutes</div>
-			<div>Red Card</div>
-			<div>Yellow Card</div>
-			<div>Country</div>
-			<div>Goals</div>
-			<div>Assists</div>
+				<input type="submit" name="go" id="go" value="submit" class="button">
+
+
+
+		</form>
+		<hr>
+		{%if safe%}
+		{%load static%}
+
+		<div id="both">
+			<div id="head">
+				..
+			</div>
+			<div id="right_pl">
+				{%for r in player1.player_details%}
+
+				<img src="{% static r.pl_path %}">
+				{%endfor%}
+
+			</div>
+
+			<div id="left_pl">
+				{%for r in player2.player_details%}
+
+				<img src="{% static r.pl_path %}">
+				{%endfor%}
+
+			</div>
 		</div>
-		<div id ="right_pl">
-			{%for r in player1.player_details%}
-			<div>{{r.Name}}</div>
-			<div>{{r.Position}}</div>
-			<div>{{r.Minutes_played}}</div>
-			<div>{{r.Red_card}}</div>
-			<div>{{r.Yellow_card}}</div>
-			<div>{{r.Country}}</div>
-			{%endfor%}
-			<div> {{player1.goals}}</div>
-			<div>{{player1.assist}}</div>
+		<div id="both">
+			<div id="head">
+				<div>Name</div>
+				<div>Position</div>
+				<div>Team Name</div>
+				<div>Minutes</div>
+				<div>Red Card</div>
+				<div>Yellow Card</div>
+				<div>Country</div>
+				<div>Goals</div>
+				<div>Assists</div>
 
-		</div>
-		<div id ="left_pl">
-			{%for r in player2.player_details%}
-			<div>{{r.Name}}</div>
-			<div>{{r.Position}}</div>
-			<div>{{r.Minutes_played}}</div>
-			<div>{{r.Red_card}}</div>
-			<div>{{r.Yellow_card}}</div>
-			<div>{{r.Country}}</div>
-			{%endfor%}
-			<div>{{player2.goals}}</div>
-			<div>{{player2.assist}}</div>
+			</div>
+			<div id="right_pl">
+				{%for r in player1.player_details%}
 
-		</div>
-		<div>
-{%endif%}
-</section>
+				<div>{{r.Name}}</div>
+				<div>{{r.Position}}</div>
+				<div>{{r.team_name}}</div>
+				<div>{{r.Minutes_played}}</div>
+				<div>{{r.Red_card}}</div>
+				<div>{{r.Yellow_card}}</div>
+				<div>{{r.Country}}</div>
+				{%endfor%}
+				<div> {{player1.goals}}</div>
+				<div>{{player1.assist}}</div>
+
+			</div>
+			<div id="left_pl">
+
+				{%for r in player2.player_details%}
+
+				<div>{{r.Name}}</div>
+				<div>{{r.Position}}</div>
+				<div>{{r.team_name}}</div>
+				<div>{{r.Minutes_played}}</div>
+				<div>{{r.Red_card}}</div>
+				<div>{{r.Yellow_card}}</div>
+				<div>{{r.Country}}</div>
+				{%endfor%}
+				<div>{{player2.goals}}</div>
+				<div>{{player2.assist}}</div>
+
+			</div>
+			<div>
+				{%endif%}
+	</section>
 
 </body>
+
 </html>

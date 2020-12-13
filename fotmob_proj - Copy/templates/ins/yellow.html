@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="templates/css/bootstrap.min.css">
+    <link rel="stylesheet" href="templates/css/styles.css">
+    <title>main_page...</title>
+    
+</head>
+<style type="text/css">
+	body {
+		background-color: #e6d195;
+		padding: 0px;
+		margin:0px;
+	}
+	#header_name{
+		background-color: #12CC32;
+		padding-top: 20px;
+		padding-bottom: 5px;
+		margin-bottom: 50px;
+	}
+	#content{
+		margin-top: 300px;
+		margin: 10px;
+	}
+	#option{
+		position: absolute;
+		margin: 10px;
+	}
+	#option .left{
+		float: left;
+		margin-top:10px;
+		margin-right:50px;  
+		border: 2px solid blue;
+		background-color: white;
+		color: white;
+
+	}
+	#table_1{
+		margin-top: 50px;
+	}
+</style>
+<body>
+<header id ="header_name">     
+	
+    <h1 >Fotmob</h1>
+    <section id ="option">
+        
+        <div class="left"><a href="{% url 'index' %}">Home</a></div>
+    	<div class="left"><a href="{% url 'scores' %}">Scores</a></div>
+        <div class="left"><a href="{% url 'table' %}">Table</a></div>
+        
+    </section>
+            
+	
+         
+</header>
+
+
+<h2 style="margin-left: 40%;; align-content: center;">Fill form</h2>
+
+<form method="POST" autocomplete="off">
+	{% csrf_token %}
+	<h1 class ="cont">Inserting Yellow card Score</h1>
+
+	<div class="cont">
+	  <p>
+		<label for="yc_no">Yellow card No</label>
+		<input type="text" name="yc_no" id="yc_no">
+	  </p>
+
+	  
+		<label for="pl_name">Player name</label>
+		<input type="text" name="pl_name" id="pl_name">
+	  </p>
+
+	  
+		<label for="team_name">Team name</label>
+		<input type="text" name="team_name" id="team_name">
+	  </p>
+	  <p>
+		<label for="match_date">Match date</label>
+		<input type="text" name="match_date" id="match_date">
+	  </p>
+	  <p>
+		<label for="stadium_name">Stadium name</label>
+		<input type="text" name="stadium_name" id="stadium_name">
+	  </p>
+	  
+	  <input type="submit" name="go" id="go" value="insert" class ="button">
+
+	  
+
+	</div>
+  </form>
+  <p>please fill all ncessary information</p>
+
+</body>
+</html>

@@ -23,6 +23,11 @@
       padding-top: 20px;
       padding-bottom: 5px;
     }
+    .subtitle{
+      font-size: 20px;
+      text-align: center;
+      font-weight: 600;
+    }
     #content{
       margin: 10px;
     }
@@ -82,7 +87,7 @@
 	}
 	#right{
 		float: left;
-		width:20%;
+		width:30%;
 	}
 	#r_m{
 		float: right;
@@ -90,22 +95,26 @@
 	}
 	#half{
 		float: left;
-		width:20%;
+		width:30%;
 	}
+  #logo{
+    height: 70px;
+    width: 70px;
+  }
   </style>
   <body>
     <!--navbutton-->
     <!--navbar-->
     <!--header-->
     <header id ="header_name">     
-	
+      {%load static%}
       <h1 >Fotmob</h1>
       <section id ="option">
 
       <div class="banner">
-        <img src="{% static 'images/logoFotmob.png' %}" alt="Fotmob Logo" class="logo">
-        <h3 class="subtitle">Football Premier League Info</h3><br>
-        <div class="left"><a href=" {% url 'scores' %} " class="">Score</a></div>
+        <img id="logo" src="{% static 'images/fotmob_logo.png' %}" alt="Fotmob Logo" class="logo">
+        <span class="subtitle"><div>Football League Info</div></span><br>
+        <div class="left"><a href=" {% url 'scores' %} " class="">Statistics</a></div>
         <div class="left"><a href=" {% url 'table' %} " class="">Table</a></div>
         <div class="left"><a href="{% url 'compare' %} " class="">Compare</a></div>
         {%if user != ""%}
@@ -121,12 +130,12 @@
       </header>
       <section id ="content">
 
-        <h1 id ="table_1">Recent Match</h1>
-        {%load static%}
+        <h1 id ="table_1">Recent Matches</h1>
+        
         
         <table width="100%"  border="1">
             <tr style="background-color:lightgray">
-                <th>result</th>
+                <th>Result</th>
                 
             </tr>
             {% for res in matches %}
@@ -136,7 +145,7 @@
         
                  <div id="left">{{res.m_date}}</div>
                  <div id="right">
-                  <img id ="half" src="{% static res.h_path %}">
+                  <div id ="half"><img  src="{% static res.h_path %}"></div>
                    <span>
                      <div id="half">
                        {{res.h_name}}
@@ -156,7 +165,7 @@
                    {{res.a_name}}
                  </div>
                 </span>
-                <img id ="half" src="{% static res.a_path %}">
+                <div id ="half"><img  src="{% static res.a_path %}"></div>
               </div>
               <div id="r_m">{{res.wl}}</div>
             </a>

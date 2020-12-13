@@ -54,13 +54,14 @@ def GoalsView(request):
 
 def AssistsView(request):
     cursor = connection.cursor()
-    sql = "SELECT P.FIRST_NAME||' '||P.LAST_NAME AS FULL_name, T.TEAM_NAME ,SUM(assist) as total_goal FROM SCORES S  JOIN PLAYER P ON (S.SCORE_ID = P.PLAYER_ID) JOIN TEAM T ON (S.TEAM_ID = T.TEAM_ID) GROUP BY S.SCORING_ID,P.FIRST_NAME||' '||P.LAST_NAME,T.TEAM_NAME ORDER BY total_goal DESC;"
+    sql = "SELECT P.FIRST_NAME||' '||P.LAST_NAME AS FULL_name, T.TEAM_NAME ,SUM(assist) as total_assist FROM SCORES S  JOIN PLAYER P ON (S.ASSIST_ID = P.PLAYER_ID) JOIN TEAM T ON (S.TEAM_ID = T.TEAM_ID) GROUP BY S.ASSIST_ID,P.FIRST_NAME||' '||P.LAST_NAME,T.TEAM_NAME ORDER BY total_assist DESC;"
     cursor.execute(sql)
     result = cursor.fetchall()
     cursor.close()
-  
+    total_assist = 0
     dict_result = []
-    for r in result:
+    for r in result:        
+        
         Full_name = r[0]
         Team_name = r[1]
         total_assist = r[2]
