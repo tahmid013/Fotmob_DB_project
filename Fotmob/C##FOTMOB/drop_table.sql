@@ -1,0 +1,16 @@
+
+DROP TABLE PLAYS;
+
+DROP TABLE Scores;
+
+DROP TABLE Match;
+
+DROP TABLE Player;
+
+DROP TABLE Coach;
+
+DROP TABLE Team;
+
+DROP TABLE Stadium;
+
+DROP TABLE Referee;

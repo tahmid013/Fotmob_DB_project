@@ -1,0 +1,2 @@
+ALTER TABLE SCORES
+	ADD assists NUMBER;
